@@ -1,0 +1,15 @@
+<script defer type="module">
+  import { start } from "./synth.js";
+  import { parse } from "./parser.js";
+
+  document.querySelector("#start").addEventListener("click", start);
+
+  const test = `{ translate: [3, 3], name: 3 }`;
+
+  console.log(parse(test));
+
+
+</script>
+<button id="start">
+  start
+</button>
