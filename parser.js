@@ -3,16 +3,13 @@ const oneOf = item => w => w.startsWith(item);
 const anyOf = arr => w => arr.some(oneOf(w));
 
 const tokenRules = {
-  number: /\d+\.\d+|\d+\.|\.\d+|\d+/,
-  string: /".*?"/, // non-greedy
-  op: anyOf(["+", "-", "/", "*"]),
-  symbol: /[a-zA-Z][a-zA-Z\d]*/,
+  number: /\d+/,
+  letter: /[a-g]#?/,
   ws: /\s+/,
-  literals: anyOf(["{", "}", "[", "]", ":", ","])
 }
 
 const skip = ["ws"];
-const literals = ["{", "}", "[", "]", ":", ","]; // makes the type the value
+const literals = [];
 
 const regExFunc = regex => string => { 
   const match = string.match(regex); 
@@ -25,7 +22,7 @@ const makeTest = (rule, start = false) =>
   : Array.isArray(rule) ? x => rule.map(makeTest).some(f => f(x))
   : rule; // is function
 
-const makeTokenizer = (rules, { skip = [] , literals = [] } = { }) => string => { 
+const makeTokenizer = (rules, { skip = [], literals = [] } = { }) => string => { 
   let index = 0;
   const peek = () => string[index];
   // const next = () => string[index++];
@@ -196,53 +193,16 @@ function evaluate(node, ast, turtle, count = 0) {
   }
 }
 
-
-//////////////////////////////////////
-
-// const tokenRules = {
-//   num: /\d+\.\d+|\d+\.|\.\d+|\d+/,
-//   string: /".*"/, // how to have start, middle, end
-//   // string2: [`"`, /.*/, `"`],
-//   op: (word) => ["+", "-", "/", "*"].includes(char), // how did this work? word -> char
-//   symbol: /[a-zA-Z][a-zA-Z\d]*/,
-//   ws: /\s+/,
-//   "{": "{",
-//   "}": "}",
-//   "[": "[",
-//   "]": "]",
-//   ":": ":",
-//   ",": ",",
-//   "\"": "\""
-// }
-
 const tokenize = makeTokenizer(tokenRules, { skip, literals });
 
-// need optional and match anything
-
-const number = and(["number"])
-
-const entry = s => or([
-  and(["symbol", ":", p, ","]),
-  and(["symbol", ":", p])
+const note = s => or([
+  and(["letter", "number"]),
+  and(["letter"])
 ])(s);
 
-const e = s => or([
-  and([p, "op", e]),
-  p
-])(s)
-  
-const p = s => or([
-  and(["op", p]),
-  or([ 
-    and(["(", e, ")"]),
-    and(["[", many(e), "]"]), // what about ,
-  ]), 
-  or([number, "string", "symbol", ","])
-])(s)
+const parse = x => many(note)(x);
 
-export const parse = x => and(["{", many(entry), "}"], x => x[1])(x);
-
-
+export { parse, tokenize };
 
 
 

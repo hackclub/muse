@@ -1,12 +1,18 @@
 <script defer type="module">
   import { start } from "./synth.js";
-  import { parse } from "./parser.js";
+  import { parse, tokenize } from "./parser.js";
 
-  document.querySelector("#start").addEventListener("click", start);
 
-  const test = `{ translate: [3, 3], name: 3 }`;
+  const test = `g3 e4 d4 c4 d4 c4 a3 a3 g3`;
 
-  console.log(parse(test));
+  const tokens = tokenize(test);
+  const [ ast, remainder ] = parse(tokens);
+  console.log(tokens);
+  console.log(ast);
+
+  const notes = ast;
+
+  document.querySelector("#start").addEventListener("click", () => start(notes));
 
 
 </script>
