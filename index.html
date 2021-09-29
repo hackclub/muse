@@ -3,19 +3,24 @@
   import { parse, tokenize } from "./parser.js";
 
 
-  const test = `g3 e4 d4 c4 d4 c4 a3 a3 g3`;
+  // const test = `g3 e4 d4 c4 d4 c4 a3 a3 g3`;
 
-  const tokens = tokenize(test);
-  const [ ast, remainder ] = parse(tokens);
-  console.log(tokens);
-  console.log(ast);
+  const getCode = () => document.querySelector("#code").value;
 
-  const notes = ast;
+  const trigger = () => {
+    const code = getCode();
+    const tokens = tokenize(code);
+    const [ ast, remainder ] = parse(tokens);
+    console.log("t", tokens, "a", ast, "r", remainder);
+    start(ast);
+  }
 
-  document.querySelector("#start").addEventListener("click", () => start(notes));
+  document.querySelector("#start").addEventListener("click", trigger);
+
 
 
 </script>
+<textarea id="code">g3 e4 d4 c4 d4 c4 a3 a3 g3</textarea>
 <button id="start">
   start
 </button>

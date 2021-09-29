@@ -5,10 +5,11 @@ const anyOf = arr => w => arr.some(oneOf(w));
 const tokenRules = {
   number: /\d+/,
   letter: /[a-g]#?/,
+  // note: /([a-g]#?[\d*])|\d+/,
   ws: /\s+/,
 }
 
-const skip = ["ws"];
+const skip = [];
 const literals = [];
 
 const regExFunc = regex => string => { 
@@ -193,14 +194,53 @@ function evaluate(node, ast, turtle, count = 0) {
   }
 }
 
+// should do this with ws in grammer, shouldn't skip
+const joined = (preds, transform = null) => s => { // must match each predicate
+  const result = [];
+
+  let startIndex = null;
+  for (let pred of preds) {
+    if (typeof pred === "string") pred = convert(pred);
+
+    const next = pred(s);
+    if (next === null) return null;
+    s = next[1];
+
+    if (startIndex !== null) {
+      if (next[0].index !== startIndex) return null;
+    }
+    startIndex = next[0].index + next[0].value.length;
+
+    result.push(next[0])
+  }
+  
+  return result.length === preds.length 
+    ? [transform ? transform(result) : result, s] 
+    : null;
+}
+
+const trim = pred => or([
+    and(["ws", pred, "ws"], ([_0, x, _1]) => x),
+    and([pred, "ws"], ([x, _]) => x),
+    and(["ws", pred], ([_, x]) => x),
+    pred
+  ])
+
 const tokenize = makeTokenizer(tokenRules, { skip, literals });
+
+const convertNote = x => Array.isArray(x) 
+  ? { type: "note", letter: x[0], number: x[1] } 
+  : { type: "note", letter: x, number: 0 };
+
 
 const note = s => or([
   and(["letter", "number"]),
-  and(["letter"])
+  "letter",
 ])(s);
 
-const parse = x => many(note)(x);
+const parse = x => many(
+  trim(note)
+)(x);
 
 export { parse, tokenize };
 
