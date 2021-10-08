@@ -1,8 +1,7 @@
 
 export function start(notes) {
   // create web audio api context
-  var audioCtx = new(window.AudioContext || window.webkitAudioContext)();
-
+  let audioCtx = new(window.AudioContext || window.webkitAudioContext)();
 
   async function playNote([frequency, duration]) {
     // create Oscillator node

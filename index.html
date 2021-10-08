@@ -3,24 +3,54 @@
   import { parse, tokenize } from "./parser.js";
 
 
-  // const test = `g3 e4 d4 c4 d4 c4 a3 a3 g3`;
-
   const getCode = () => document.querySelector("#code").value;
 
-  const trigger = () => {
-    const code = getCode();
-    const tokens = tokenize(code);
+  const play = str => {
+    const tokens = tokenize(str);
     const [ ast, remainder ] = parse(tokens);
     console.log("t", tokens, "a", ast, "r", remainder);
     start(ast);
   }
 
-  document.querySelector("#start").addEventListener("click", trigger);
+  const trigger = () => {
+    const code = getCode();
+    play(code);
 
+  }
 
+  const startButton = document.querySelector("#start");
+
+  startButton.addEventListener("click", trigger);
+
+  const test = (str, ...vals) => {
+    return str.reduce( 
+      (acc, cur, i) => 
+        i < vals.length 
+          ? acc + cur + vals[i] 
+          : acc + cur, 
+      "")
+  }
+
+  const interpolated = test`is it working ${3} ${4}`;
+  console.log(interpolated);
+  const toks = tokenize(interpolated);
+  console.log("tokens:\n", toks)
+  const ast = parse(toks);
+  console.log("ast:\n", ast);
 
 </script>
-<textarea id="code">g3 e4 d4 c4 d4 c4 a3 a3 g3</textarea>
+
+<style>
+  #code {
+    width: 100%;
+    min-height: 50px;
+  }
+</style>
+
+<textarea id="code">
+  3 x [ g3 e4 d4 c4 d4 c4 a3 a3 g3 ]
+  { const x = 3; }
+</textarea>
 <button id="start">
   start
 </button>

@@ -2,15 +2,17 @@
 const oneOf = item => w => w.startsWith(item);
 const anyOf = arr => w => arr.some(oneOf(w));
 
+const skip = ["ws"];
+const literals = [";", "{", "}", "[", "]", "(", ")", "x", "="];
+
 const tokenRules = {
   number: /\d+/,
   letter: /[a-g]#?/,
-  // note: /([a-g]#?[\d*])|\d+/,
+  length: /\-+|\++/,
   ws: /\s+/,
+  literal: anyOf(literals),
+  rest: /./
 }
-
-const skip = [];
-const literals = [];
 
 const regExFunc = regex => string => { 
   const match = string.match(regex); 
@@ -116,85 +118,22 @@ const and = (preds, transform = null) => s => { // must match each predicate
     : null;
 }
 
-class Stream {
-  constructor(ast) {
-    this.index = 0;
-    this.ast = ast;
-  }
+const trim = pred => or([
+  and(["ws", pred, "ws"], ([_0, x, _1]) => x),
+  and([pred, "ws"], ([x, _]) => x),
+  and(["ws", pred], ([_, x]) => x),
+  pred
+])
 
-  peek() {
-    return this.ast[this.index];
-  }
+const none = () => s => [ null, s ];
 
-  next() {
-    const current = this.ast[this.index];
-    this.index++;
-    return current;
-  }
+const any = () => s => [ s[0], s.slice(1) ];
 
-  eof() {
-    return this.peek() === undefined;
-  }
-}
+const optionalWs = s => or([ // WIP
+  "ws",
+  none
+])(s);
 
-//////////////////////////////
-
-const unaries = {
-  "-": x => -x
-}
-
-const ops = {
-  "+": (x, y) => x + y,
-  "-": (x, y) => x - y,
-  "*": (x, y) => x * y,
-  "/": (x, y) => x / y,
-};
-
-const types = {
-  symbol: (value, args) => turtle[value](...args),
-  number: (value) => Number(value),   
-  op: (value, x, y) => ops[token.value](x, y)
-};
-
-const funcs = {}
-
-function evaluate(node, ast, turtle, count = 0) {
-  if (node === undefined) return;
-  
-  if (Array.isArray(node)) {
-    const newAst = new Stream(node);
-    // return evaluate(newAst.next(), newAst, turtle);
-    return node;
-  } 
-  else if (node.type === "num") return Number(node.value);
-  else if (node.type == "binary") {
-    const [ left, op, right ] = node.value;
-    return ops[op.value](
-      evaluate(left, ast, turtle, count), 
-      evaluate(right, ast, turtle, count)
-    );
-  } else if (node.type == "symbol") {
-    if (node.value === "count") return count;
-    
-    const args = [];
-    while (ast.peek().value !== ";") {
-      args.push(evaluate(ast.next(), ast, turtle, count))
-      if (ast.eof()) break;
-    }
-    
-    return funcs[node.value](args)(turtle);
-  } else if (node.type == "unary") {
-    console.log(node)
-    // const [ left, op, right ] = node.value;
-    return null;
-  } else if (node.type === ";") {
-    return evaluate(ast.next(), ast, turtle, count);
-  } else {
-    console.error("Unexpected:", node);
-  }
-}
-
-// should do this with ws in grammer, shouldn't skip
 const joined = (preds, transform = null) => s => { // must match each predicate
   const result = [];
 
@@ -219,14 +158,36 @@ const joined = (preds, transform = null) => s => { // must match each predicate
     : null;
 }
 
-const trim = pred => or([
-    and(["ws", pred, "ws"], ([_0, x, _1]) => x),
-    and([pred, "ws"], ([x, _]) => x),
-    and(["ws", pred], ([_, x]) => x),
-    pred
-  ])
+///////////////////
+
+class Stream {
+  constructor(ast) {
+    this.index = 0;
+    this.ast = ast;
+  }
+
+  peek() {
+    return this.ast[this.index];
+  }
+
+  next() {
+    const current = this.ast[this.index];
+    this.index++;
+    return current;
+  }
+
+  eof() {
+    return this.peek() === undefined;
+  }
+}
+
+//////////////////////////////
+
+
+
 
 const tokenize = makeTokenizer(tokenRules, { skip, literals });
+
 
 const convertNote = x => Array.isArray(x) 
   ? { type: "note", letter: x[0], number: x[1] } 
@@ -234,13 +195,36 @@ const convertNote = x => Array.isArray(x)
 
 
 const note = s => or([
-  and(["letter", "number"]),
+  joined(["letter", "number"]),
   "letter",
+  ";"
 ])(s);
 
-const parse = x => many(
-  trim(note)
-)(x);
+const notes = s => many(note)(s);
+
+// const pause = or([";"]);
+
+const repeat = s => and([
+  "number", 
+  "x", 
+  "[", 
+  or([notes, repeat]), 
+  "]"
+])(s)
+
+const js = s => and([ // WIP, join everything in between
+  "{", 
+  any, 
+  "}"
+])(s) // curious how to do this in grammar but will use tagged template literal for now
+
+// const binary = s => or([
+//   and(["letter"]),
+//   and([]),
+//   and([])
+// ])(s);
+
+const parse = notes;
 
 export { parse, tokenize };
 
