@@ -31,12 +31,14 @@
       "")
   }
 
-  const interpolated = test`is it working ${3} ${4}`;
+  const interpolated = test`a3 (a4 a5)`;
   console.log(interpolated);
   const toks = tokenize(interpolated);
   console.log("tokens:\n", toks)
   const ast = parse(toks);
   console.log("ast:\n", ast);
+
+  document.querySelector("#code").innerHTML = interpolated;
 
 </script>
 

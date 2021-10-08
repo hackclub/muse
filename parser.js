@@ -3,23 +3,24 @@ const oneOf = item => w => w.startsWith(item);
 const anyOf = arr => w => arr.some(oneOf(w));
 
 const skip = ["ws"];
-const literals = [";", "{", "}", "[", "]", "(", ")", "x", "="];
+const literals = [";", "x", "[", "]", "(", ")"];
 
 const tokenRules = {
   number: /\d+/,
+  float: /[+-]?([0-9]*[.])?[0-9]+/,
+  property: /[a-z][A-Z]\s*=/,
   letter: /[a-g]#?/,
   length: /\-+|\++/,
   ws: /\s+/,
   literal: anyOf(literals),
-  rest: /./
 }
 
-const regExFunc = regex => string => { 
+const regExFunc = regex => string => { // not used
   const match = string.match(regex); 
   return match && match[0] === string;
 }
 
-const makeTest = (rule, start = false) => 
+const makeTest = (rule, start = false) => // not used
   rule instanceof RegExp ? regExFunc(rule)
   : typeof rule === "string" ? x => rule.startsWith(x)
   : Array.isArray(rule) ? x => rule.map(makeTest).some(f => f(x))
@@ -36,6 +37,7 @@ const makeTokenizer = (rules, { skip = [], literals = [] } = { }) => string => {
 
     for (const key in rules) {
       type = key;
+      value = null;
       let rule = rules[key];
       if (rule instanceof RegExp) {
         value = string.slice(index).match(rule);
@@ -58,7 +60,6 @@ const makeTokenizer = (rules, { skip = [], literals = [] } = { }) => string => {
     }
 
     if (value === undefined || value === null) throw `Unknown character: ${peek()}`
-
     if (literals.includes(value)) type = value;
     if (!skip.includes(type)) tokens.push({ type, value, index });
     index += value.length;
@@ -118,18 +119,18 @@ const and = (preds, transform = null) => s => { // must match each predicate
     : null;
 }
 
-const trim = pred => or([
+const trim = pred => or([ // not used
   and(["ws", pred, "ws"], ([_0, x, _1]) => x),
   and([pred, "ws"], ([x, _]) => x),
   and(["ws", pred], ([_, x]) => x),
   pred
 ])
 
-const none = () => s => [ null, s ];
+const none = () => s => [ null, s ]; // not used
 
-const any = () => s => [ s[0], s.slice(1) ];
+const any = () => s => [ s[0], s.slice(1) ]; // not used
 
-const optionalWs = s => or([ // WIP
+const optionalWs = s => or([ // not used
   "ws",
   none
 ])(s);
@@ -160,7 +161,7 @@ const joined = (preds, transform = null) => s => { // must match each predicate
 
 ///////////////////
 
-class Stream {
+class Stream { // not used
   constructor(ast) {
     this.index = 0;
     this.ast = ast;
@@ -189,42 +190,60 @@ class Stream {
 const tokenize = makeTokenizer(tokenRules, { skip, literals });
 
 
-const convertNote = x => Array.isArray(x) 
-  ? { type: "note", letter: x[0], number: x[1] } 
-  : { type: "note", letter: x, number: 0 };
+const convertNote = x => {
+  if ( x === null ) return null;
+  if (Array.isArray(x)) {
+    const note = { type: "note", letter: x[0][0], number: x[0][1]};
+    return [note, x[1]];
+  }
+
+  return x;
+}
 
 
-const note = s => or([
+const note = or([
   joined(["letter", "number"]),
   "letter",
   ";"
-])(s);
+], convertNote);
 
-const notes = s => many(note)(s);
+const convertSet = x => {
+  if (x === null) return null;
+  if (Array.isArray(x)) {
+    return [{ type: "set", val: x[0][1] }, x[1]];
+  }
 
-// const pause = or([";"]);
+  return x;
+}
+
+const set = s => or([
+  and(["(", beats, ")"]),
+  note
+])(s)
+
+const beat = or([
+  and([note, "length"]),
+  note,
+  and([set, "length"]),
+  set,
+])
+
+const beats = many(beat);
 
 const repeat = s => and([
   "number", 
   "x", 
   "[", 
-  or([notes, repeat]), 
+  or([beats, repeat]), 
   "]"
 ])(s)
 
-const js = s => and([ // WIP, join everything in between
-  "{", 
-  any, 
-  "}"
-])(s) // curious how to do this in grammar but will use tagged template literal for now
+const setProperty = s => and([
+  "property",
+  or(["float", "number"]),
+])(s)
 
-// const binary = s => or([
-//   and(["letter"]),
-//   and([]),
-//   and([])
-// ])(s);
-
-const parse = notes;
+const parse = or([beats, setProperty]);
 
 export { parse, tokenize };
 
