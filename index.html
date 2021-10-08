@@ -31,7 +31,7 @@
       "")
   }
 
-  const interpolated = test`a3 (a4 a5)`;
+  const interpolated = test`3 x [a3; a;]++`;
   console.log(interpolated);
   const toks = tokenize(interpolated);
   console.log("tokens:\n", toks)

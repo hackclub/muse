@@ -3,7 +3,7 @@ const oneOf = item => w => w.startsWith(item);
 const anyOf = arr => w => arr.some(oneOf(w));
 
 const skip = ["ws"];
-const literals = [";", "x", "[", "]", "(", ")"];
+const literals = [";", "x", "[", "]"];
 
 const tokenRules = {
   number: /\d+/,
@@ -100,7 +100,9 @@ const or = (preds, transform = null) => s => {
         acc || (typeof cur === "string" ? convert(cur) : cur)(s)
       , false);
 
-    return (transform ? transform(result) : result) || null
+    return Array.isArray(result) 
+      ? (transform ? [ transform(result[0]), result[1] ] : result)
+      : null;
 }
 
 const and = (preds, transform = null) => s => { // must match each predicate
@@ -191,13 +193,12 @@ const tokenize = makeTokenizer(tokenRules, { skip, literals });
 
 
 const convertNote = x => {
-  if ( x === null ) return null;
   if (Array.isArray(x)) {
-    const note = { type: "note", letter: x[0][0], number: x[0][1]};
-    return [note, x[1]];
+    const note = { type: "note", letter: x[0].value, number: Number(x[1].value)};
+    return note;
   }
 
-  return x;
+  return { type: "note", letter: x.value, number: 0 };
 }
 
 
@@ -208,42 +209,55 @@ const note = or([
 ], convertNote);
 
 const convertSet = x => {
-  if (x === null) return null;
   if (Array.isArray(x)) {
-    return [{ type: "set", val: x[0][1] }, x[1]];
+    return { type: "set", val: x[1] };
   }
 
   return x;
 }
 
+const convertGroup = x => {
+  if (Array.isArray(x)) {
+    return { type: "group", val: x[1] };
+  }
+
+  return x
+}
+
 const set = s => or([
-  and(["(", beats, ")"]),
+  and(["[", beats, "]"], convertGroup),
   note
-])(s)
+], convertSet)(s)
+
+const convertLength = x => Array.isArray(x)
+  ? { type: "length", note: x[0], length: x[1].value.length, plusOrMinus: x[1].value[0] }
+  : x;
 
 const beat = or([
-  and([note, "length"]),
+  and([note, "length"], convertLength),
   note,
-  and([set, "length"]),
+  and([set, "length"], convertLength),
   set,
 ])
 
 const beats = many(beat);
 
+const convertRepeat = x => Array.isArray(x) 
+  ? { type: "repeat", number: x[0].value, beats: x[2] }
+  : x;
+
 const repeat = s => and([
   "number", 
-  "x", 
-  "[", 
-  or([beats, repeat]), 
-  "]"
-])(s)
+  "x",
+  beats
+], convertRepeat)(s)
 
 const setProperty = s => and([
   "property",
   or(["float", "number"]),
 ])(s)
 
-const parse = or([beats, setProperty]);
+const parse = or([repeat, setProperty, beats]);
 
 export { parse, tokenize };
 
