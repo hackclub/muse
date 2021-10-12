@@ -18,20 +18,45 @@ document.body.innerHTML = `
 		.ͼl {
 		   	color: #a1a09f;
 		}
+
+		.button-container {
+			width: 100%;
+			display: grid;
+			place-content: center;
+		}
+
+		.trigger-play {
+			width: 100%;
+    		margin: 5px;
+		}
 	</style>
 
 	<code-mirror id="cm"></code-mirror>
-	<button class="trigger-play">play</button>
+	<div class="button-container">
+		<button class="trigger-play">play/attach</button>
+	</div>
 `
 
 const trigger = e => e.composedPath()[0];
 const matchesTrigger = (e, selectorString) => trigger(e).matches(selectorString);
 // create on listener
-const createListener = (target) => (eventName, selectorString, event) => { // focus doesn't work with this, focus doesn't bubble, need focusin
-	target.addEventListener(eventName, (e) => {
+const createListener = (target) => (eventName, selectorString, event, remove = false) => { // focus doesn't work with this, focus doesn't bubble, need focusin
+	if (target.getAttribute(eventName) === "true" && remove) {
+		console.log("removing old listeners")
+		target.listeners.forEach( e => target.removeEventListener(eventName, e) );
+	} else {
+		target.setAttribute(eventName, "true");
+	}
+
+	const func = (e) => {
 		e.trigger = trigger(e); // Do I need this? e.target seems to work in many (all?) cases
 		if (selectorString === "" || matchesTrigger(e, selectorString)) event(e);
-	})
+	}
+
+	target.addEventListener(eventName, func)
+
+	target.listeners = target.listeners ? [ ...target.listeners, func ] : [ func ];
+
 }
 
 const listenBody = createListener(document.body);
@@ -46,7 +71,7 @@ const repeat = (arr, num) => [].concat(... new Array(num).fill(arr));
 
 const applyModifier = (notes, modifier) => {
 	if (modifier.type === "length") {
-		return notes.map(x => applyLengthen(x, modifier))
+		return Array.isArray(notes) ? notes.map(x => applyLengthen(x, modifier)) : applyLengthen(notes, modifier);
 	} else if (modifier.type === "repeat") {
 		return repeat(notes, modifier.number);
 	}
@@ -134,16 +159,59 @@ function play() {
 	const prog = cm.view.state.doc.toString();
 	const f = new Function(...Object.keys(included), prog)
 	const result = f(...Object.values(included));
+	console.log("Attaching keys:", result);
+
+	listenBody("keydown", "", (e) => {
+
+		if (e.target.getAttribute("role") === "textbox") return;
+		let code = event.code;
+
+		if (code in result) {
+			result[code]();
+		} else if (code === "Enter" && event.shiftKey) {
+			event.preventDefault();
+	  		
+	  		play();
+		}
+
+	}, true)
+
 }
 
 const prog = `
-	a4 a5 a6
+// const KeyA = () => muse().play(\`
+// 	a4; a5; a6;
+// \`)
+
+// const KeyB = () => muse().play(\`
+// 	d4; d5; d6;
+// \`)
+
+// return {
+// 	KeyA,
+// 	KeyB
+// }
+
+muse().play(\`
+	d4+
+\`)
+
+return {}
 `
 
-muse(prog);
+// muse().play(prog);
+
+const toks = tokenize("d4+");
+console.log("tokens:\n", toks)
+const [ ast, remainder ] = parse(toks);
+console.log("ast:\n", ast);
+console.log("remainder:\n", remainder);
+
+const result = compile(ast);
+console.log(result);
 
 document.querySelector("#cm").view.dispatch({
-  changes: { from: 0, insert: `muse().play(\`\n${prog.trim()}\n\`)` }
+  changes: { from: 0, insert: prog.trim() }
 });
 
 

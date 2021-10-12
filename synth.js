@@ -52,8 +52,9 @@ export function start(notes) {
   const playString = async (notes) => {
     for (let i = 0; i < notes.length; i++) {
       let [ symbol, beats] = notes[i];
+      console.log(beats);
       if (symbol === ";") await sleep(oneBeat*beats);
-      else playNote([letters[symbol], beats]);
+      else playNote([letters[symbol], oneBeat*beats]);
     }
   }
 
