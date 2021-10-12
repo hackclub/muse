@@ -37,15 +37,23 @@ export function start(notes) {
     "b": 30.87,
   }
 
+  for (let i = 1; i < 10; i++) {
+    for (const k in letters) {
+      letters[`${k}${i}`] = letters[k]*2**i;
+    }
+  }
+
+  console.log(letters);
+
   // playNote([391, 287])
 
   let oneBeat = 600;
 
   const playString = async (notes) => {
     for (let i = 0; i < notes.length; i++) {
-      let { letter, number } = notes[i];
-      if (letter === ";") await sleep(oneBeat);
-      else playNote([letters[letter]*2**number, oneBeat]);
+      let [ symbol, beats] = notes[i];
+      if (symbol === ";") await sleep(oneBeat*beats);
+      else playNote([letters[symbol], beats]);
     }
   }
 

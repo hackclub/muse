@@ -3,17 +3,14 @@ const oneOf = item => w => w.startsWith(item);
 const anyOf = arr => w => arr.some(oneOf(w));
 
 const skip = ["ws"];
-const literals = ["loop", "thread", ";", "[", "]"];
+const literals = ["x", ";", "[", "]"];
 
 const tokenRules = {
   number: /\d+/,
-  float: /[+-]?([0-9]*[.])?[0-9]+/,
-  property: /[a-z][A-Z]\s*=/,
-  // symbol: /[a-z][A-Z]/,
-  letter: /[a-g]#?/,
   length: /\-+|\++/,
   ws: /\s+/,
   literal: anyOf(literals),
+  symbol: /[a-zA-Z][a-zA-Z\d\#]*/,
 }
 
 const regExFunc = regex => string => { // not used
@@ -187,83 +184,37 @@ class Stream { // not used
 
 //////////////////////////////
 
-
-
-
 const tokenize = makeTokenizer(tokenRules, { skip, literals });
 
+// const convertLength = x => Array.isArray(x)
+//   ? { type: "length", note: x[0], length: x[1].value.length, plusOrMinus: x[1].value[0] }
+//   : x;
 
-const convertNote = x => {
-  if (Array.isArray(x)) {
-    const note = { type: "note", letter: x[0].value, number: Number(x[1].value)};
-    return note;
-  }
-
-  return { type: "note", letter: x.value, number: 0 };
-}
-
-
-const note = or([
-  joined(["letter", "number"]),
-  "letter",
-  ";"
-], convertNote);
-
-const convertSet = x => {
-  if (Array.isArray(x)) {
-    return { type: "set", val: x[1] };
-  }
-
-  return x;
-}
-
-const convertGroup = x => {
-  if (Array.isArray(x)) {
-    return { type: "group", val: x[1] };
-  }
-
-  return x
-}
-
-const set = s => or([
-  and(["[", beats, "]"], convertGroup),
-  note
-], convertSet)(s)
-
-const convertLength = x => Array.isArray(x)
-  ? { type: "length", note: x[0], length: x[1].value.length, plusOrMinus: x[1].value[0] }
+const convertModifier = x => Array.isArray(x) 
+  ? { type: "repeat", number: Number(x[1].value) }
   : x;
 
-const beat = or([
-  and([note, "length"], convertLength),
+const convertModifier0 = x => ({ type: "modifier", notes: x[1], modifier: x[3] })
+const convertModifier1 = x => ({ type: "modifier", notes: x[0], modifier: x[1] })
+
+const p = s => or([
+  and([ "[", many(p), "]", modifier], convertModifier0),
+  and([ "[", many(p), "]" ], x => x[1]),
+  and([ note, modifier ], convertModifier1),
   note,
-  and([set, "length"], convertLength),
-  set,
-])
+])(s);
 
-const beats = many(beat);
+const note = s => or([
+  "symbol",
+  ";"
+])(s);
 
-const convertRepeat = x => Array.isArray(x) 
-  ? { type: "repeat", number: Number(x[1].value), beats: x[2] }
-  : x;
+const modifier = s => or([
+  and(["x", "number"]),
+  "length"
+], convertModifier)(s)
 
-const repeat = s => and([
-  "loop", 
-  "number",
-  beats
-], convertRepeat)(s)
-
-const thread = s => and([
-  "thread", 
-  beats
-], convertRepeat)(s)
-
-const setProperty = s => and([
-  "property",
-  or(["float", "number"]),
-])(s)
-
-const parse = or([repeat, thread, setProperty, beats]);
+const parse = many(p);
 
 export { parse, tokenize };
 
