@@ -74,17 +74,25 @@ const compile = ast => {
 	return result;
 }
 
-const muse = (prog) => {
-	const toks = tokenize(prog);
-	console.log("tokens:\n", toks)
-	const [ ast, remainder ] = parse(toks);
-	console.log("ast:\n", ast);
-	console.log("remainder:\n", remainder);
-	
-	const result = compile(ast);
-	console.log(result);
-	start(result);
+class Muse {
+	constructor() {}
+
+	play(prog) {
+		const toks = tokenize(prog);
+		console.log("tokens:\n", toks)
+		const [ ast, remainder ] = parse(toks);
+		console.log("ast:\n", ast);
+		console.log("remainder:\n", remainder);
+		
+		const result = compile(ast);
+		console.log(result);
+		start(result);
+
+		return this;
+	}
 }
+
+const muse = () => new Muse();
 
 let letters = {
 	"c": 16.35,
@@ -135,7 +143,7 @@ const prog = `
 muse(prog);
 
 document.querySelector("#cm").view.dispatch({
-  changes: { from: 0, insert: `muse(\`\n${prog.trim()}\n\`)` }
+  changes: { from: 0, insert: `muse().play(\`\n${prog.trim()}\n\`)` }
 });
 
 
