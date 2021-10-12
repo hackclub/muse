@@ -1,58 +1,11 @@
-<script defer type="module">
-  import { start } from "./synth.js";
-  import { parse, tokenize } from "./parser.js";
+<!doctype html>
 
-
-  const getCode = () => document.querySelector("#code").value;
-
-  const play = str => {
-    const tokens = tokenize(str);
-    const [ ast, remainder ] = parse(tokens);
-    console.log("t", tokens, "a", ast, "r", remainder);
-    start(ast);
-  }
-
-  const trigger = () => {
-    const code = getCode();
-    play(code);
-
-  }
-
-  const startButton = document.querySelector("#start");
-
-  startButton.addEventListener("click", trigger);
-
-  const test = (str, ...vals) => {
-    return str.reduce( 
-      (acc, cur, i) => 
-        i < vals.length 
-          ? acc + cur + vals[i] 
-          : acc + cur, 
-      "")
-  }
-
-  const interpolated = test`3 x [a3; a;]++`;
-  console.log(interpolated);
-  const toks = tokenize(interpolated);
-  console.log("tokens:\n", toks)
-  const ast = parse(toks);
-  console.log("ast:\n", ast);
-
-  document.querySelector("#code").innerHTML = interpolated;
-
-</script>
-
-<style>
-  #code {
-    width: 100%;
-    min-height: 50px;
-  }
-</style>
-
-<textarea id="code">
-  3 x [ g3 e4 d4 c4 d4 c4 a3 a3 g3 ]
-  { const x = 3; }
-</textarea>
-<button id="start">
-  start
-</button>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Muse</title>
+  <!-- <link rel="stylesheet" href="./styles.css"></link> -->
+  <script defer type="module" src="./index.js"></script>
+</head>
+<body></body>
+</html>

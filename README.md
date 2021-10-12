@@ -32,3 +32,13 @@
 - Instead of adding js interpolation to program, make interpreter for tagged template literal
 - should repeat with x work both ways, 3 x a4 == a4 x 3
 	- latter of the two could be slightly ambigious as to whether it's repeat 3 more times or repeat 3 times total
+- unpitched rythmic component
+	- drums have sharp decay and fast attack 
+
+# Links
+
+- https://en.wikipedia.org/wiki/Envelope_(music)
+
+
+- link to instruments that hack clubbers made for noodling
+

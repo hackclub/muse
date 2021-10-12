@@ -173,6 +173,32 @@ interpolated js
 { ...js... }
 
 
+////////////////////
+
+oct. 8 2021
+
+notes
+
+a5
+
+pauses
+
+;
+
+loops
+
+loop 4 a4
+
+threads
+
+thread []
+
++ longer
+- shorter
+
+
+
+
 
 
 

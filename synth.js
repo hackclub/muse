@@ -19,27 +19,7 @@ export function start(notes) {
      gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.25 );
   }
 
-    function playMelody(notes) {
-      let note;
-      let tempo = 100;
-      while (notes.length > 0) {
-        note = notes.pop();
-        playNote(note[0], 1000 * 256 / (note[1] * tempo));
-      }
-    }
-
   const sleep = m => new Promise(r => setTimeout(r, m));
-
-  const play = async (notes) => {
-    for (let i = 0; i < notes.length; i++) {
-      const noteSet = notes[i];
-      let d = noteSet[0][1];
-      noteSet.forEach(note => playNote(note));
-      await sleep(d)
-    }
-  }
-
-
 
   // play(notes);
   let letters = {
@@ -59,20 +39,13 @@ export function start(notes) {
 
   // playNote([391, 287])
 
-  const pl = (letter, dur) => playNote([letters[letter], dur])
+  let oneBeat = 600;
 
   const playString = async (notes) => {
     for (let i = 0; i < notes.length; i++) {
-      let [letter, number] = notes[i];
-      letter = letter.value;
-
-      if (number === undefined) number = 0;
-      else {
-        number = parseFloat(number.value);
-      }
-
-      playNote([letters[letter]*2**number, 500])
-      await sleep(500);
+      let { letter, number } = notes[i];
+      if (letter === ";") await sleep(oneBeat);
+      else playNote([letters[letter]*2**number, oneBeat]);
     }
   }
 

@@ -3,12 +3,13 @@ const oneOf = item => w => w.startsWith(item);
 const anyOf = arr => w => arr.some(oneOf(w));
 
 const skip = ["ws"];
-const literals = [";", "x", "[", "]"];
+const literals = ["loop", "thread", ";", "[", "]"];
 
 const tokenRules = {
   number: /\d+/,
   float: /[+-]?([0-9]*[.])?[0-9]+/,
   property: /[a-z][A-Z]\s*=/,
+  // symbol: /[a-z][A-Z]/,
   letter: /[a-g]#?/,
   length: /\-+|\++/,
   ws: /\s+/,
@@ -243,12 +244,17 @@ const beat = or([
 const beats = many(beat);
 
 const convertRepeat = x => Array.isArray(x) 
-  ? { type: "repeat", number: x[0].value, beats: x[2] }
+  ? { type: "repeat", number: Number(x[1].value), beats: x[2] }
   : x;
 
 const repeat = s => and([
-  "number", 
-  "x",
+  "loop", 
+  "number",
+  beats
+], convertRepeat)(s)
+
+const thread = s => and([
+  "thread", 
   beats
 ], convertRepeat)(s)
 
@@ -257,7 +263,7 @@ const setProperty = s => and([
   or(["float", "number"]),
 ])(s)
 
-const parse = or([repeat, setProperty, beats]);
+const parse = or([repeat, thread, setProperty, beats]);
 
 export { parse, tokenize };
 
