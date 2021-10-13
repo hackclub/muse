@@ -4,21 +4,37 @@ import { createMuse } from "./Muse.js";
 import { view } from "./view.js";
 import { initialSamples } from "./samples.js";
 
-const STATE = {
-	activeMuses: [],
-	samples: initialSamples(),
-	recordingStatus: "ready",
-}
+const listenBody = delegate(document.body);
 
-let rec
-let audioChunks = []
+let rec;
+let audioChunks = [];
 
-navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
-    handlerFunction(stream)
-})
+async function init(args, state) {
+	dispatch("RENDER");
 
-function handlerFunction(stream) {
-    rec = new MediaRecorder(stream)
+	listenBody("click", ".trigger-play", () => {
+		play();
+	})
+
+	listenBody("keydown", "", (e) => {
+		let code = event.code;
+		if (code === "Enter" && event.shiftKey) {
+		  event.preventDefault();
+		  play();
+		}
+	})
+
+	const saved = window.localStorage.getItem("muse")
+	document.querySelector("#cm").view.dispatch({
+	  changes: { from: 0, insert: !saved ? prog.trim() : saved }
+	});
+
+
+	const stream = await navigator
+		.mediaDevices
+		.getUserMedia({ audio: true })
+
+	rec = new MediaRecorder(stream)
     rec.ondataavailable = (e) => {
         audioChunks.push(e.data)
         if (rec.state == "inactive") {
@@ -26,6 +42,14 @@ function handlerFunction(stream) {
             sendData(blob)
         }
     }
+
+	dispatch("RENDER")
+}
+
+const STATE = {
+	activeMuses: [],
+	samples: initialSamples(),
+	recordingStatus: "ready",
 }
 
 async function sendData(data) {
@@ -45,14 +69,13 @@ async function sendData(data) {
 
 
 const ACTIONS = {
-	INIT: (args, state) => {},
+	INIT: init,
 	RENDER: (args, state) => {},
 	ADD_ACTIVE_MUSE: ({ newMuse }, state) => {
 		state.activeMuses.push(newMuse);
 	},
 	DELETE_SAMPLE: ({index}, state) => {
-		state.samples[index].deleted = true
-		console.log({STATE})
+		state.samples[index].deleted = true;
 	},
 	START_RECORDING: (args, state) => {
 		rec.start()
@@ -82,20 +105,6 @@ window.dispatch = dispatch;
 dispatch("INIT");
 
 const included = { createMuse }
-
-const listenBody = delegate(document.body);
-
-listenBody("click", ".trigger-play", () => {
-	play();
-})
-
-listenBody("keydown", "", (e) => {
-	let code = event.code;
-	if (code === "Enter" && event.shiftKey) {
-	  event.preventDefault();
-	  play();
-	}
-})
 
 
 function play() {
@@ -143,22 +152,6 @@ return {
 }
 
 `
-
-const saved = window.localStorage.getItem("muse")
-console.log(saved);
-document.querySelector("#cm").view.dispatch({
-  changes: { from: 0, insert: !saved ? prog.trim() : saved }
-});
-
-function initRecorder() {
-
-}
-initRecorder()
-
-// initSamples()
-
-
-
 
 
 
