@@ -119,6 +119,14 @@ const and = (preds, transform = null) => s => { // must match each predicate
     : null;
 }
 
+const opt = pred => s => { // optional
+  if (typeof pred === "string") pred = convert(pred);
+
+  const next = pred(s);
+  if (next === null) return [null, s]; // should I use null or []
+  else return next;
+}
+
 const trim = pred => or([ // not used
   and(["ws", pred, "ws"], ([_0, x, _1]) => x),
   and([pred, "ws"], ([x, _]) => x),
@@ -194,14 +202,14 @@ const convertModifier = x => Array.isArray(x)
   ? { type: "repeat", number: Number(x[1].value) }
   : x;
 
-const convertModifier0 = x => ({ type: "modifier", notes: x[1], modifier: x[3] })
-const convertModifier1 = x => ({ type: "modifier", notes: x[0], modifier: x[1] })
+const convertModifier0 = x => x[3] === null ? x[1] : ({ type: "modifier", notes: x[1], modifier: x[3] })
+const convertModifier1 = x => x[1] === null ? x[0] : ({ type: "modifier", notes: x[0], modifier: x[1] })
 
 const p = s => or([
-  and([ "[", many(p), "]", modifier], convertModifier0),
-  and([ "[", many(p), "]" ], x => x[1]),
-  and([ note, modifier ], convertModifier1),
-  note,
+  and([ "[", many(p), "]", opt(modifier)], convertModifier0),
+  // and([ "[", many(p), "]" ], x => x[1]),
+  and([ note, opt(modifier) ], convertModifier1),
+  // note,
 ])(s);
 
 const note = s => or([
@@ -215,6 +223,8 @@ const modifier = s => or([
 ], convertModifier)(s)
 
 const parse = many(p);
+
+const con = ([x, rest]) => ({type: "number", val: x[0]})
 
 export { parse, tokenize };
 

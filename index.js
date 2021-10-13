@@ -162,16 +162,17 @@ function play() {
 	console.log("Attaching keys:", result);
 
 	listenBody("keydown", "", (e) => {
+		let code = event.code;
+
+		if (code === "Enter" && event.shiftKey) {
+			event.preventDefault();
+	  		play();
+		}
 
 		if (e.target.getAttribute("role") === "textbox") return;
-		let code = event.code;
 
 		if (code in result) {
 			result[code]();
-		} else if (code === "Enter" && event.shiftKey) {
-			event.preventDefault();
-	  		
-	  		play();
 		}
 
 	}, true)

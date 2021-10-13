@@ -16,6 +16,7 @@ export function start(notes) {
     g.gain.setValueAtTime(0, audioCtx.currentTime);
     g.gain.linearRampToValueAtTime(.2, audioCtx.currentTime + 0.1);
     g.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration/1000)
+    // o.stop();
     // audioCtx.close();
 
     // create Oscillator node
