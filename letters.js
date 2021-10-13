@@ -19,11 +19,11 @@ for (let i = 1; i < 10; i++) {
   }
 }
 
-async function playNote(frequency, duration, ctx) {
+async function playNote(frequency, duration, ctx, ops = {}) {
   var o = ctx.createOscillator()
   var g = ctx.createGain()
   o.frequency.value = frequency;
-  o.type = 'sine';
+  o.type = ops.type || 'sine';
   o.connect(g)
   g.connect(ctx.destination)
   o.start()
@@ -46,10 +46,15 @@ async function playNote(frequency, duration, ctx) {
   // gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration/1500);
 }
 
-for (const k in letters) {
-  let hz = letters[k];
-  letters[k] = (duration, ctx) => playNote(hz, duration, ctx);
+function getLetters(ops) {
+  const newLetters = {};
+  for (const k in letters) {
+    let hz = letters[k];
+    newLetters[k] = (duration, ctx) => playNote(hz, duration, ctx, ops);
+  }
+
+  return newLetters;
 }
 
-export { letters };
+export { getLetters };
 

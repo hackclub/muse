@@ -43,6 +43,11 @@ export const view = (state) => html`
 			<button @click=${e => dispatch("REMOVE_MUSE", { index : i })}>stop</button>
 		</div>`)
 	}
+	<div>
+		Welcome to Muse
+
+		todo: examples
+	</div>
 	<audio id="bubbles" src="./samples/bubbles.mp3"></audio> 
 	<audio id="clay" src="./samples/clay.mp3"></audio>
 	<audio id="confetti" src="./samples/confetti.mp3"></audio>
