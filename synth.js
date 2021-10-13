@@ -1,22 +1,34 @@
+const AudioContext = window.AudioContext || window.webkitAudioContext;
+const audioCtx = new AudioContext();
 
 export function start(notes) {
   // create web audio api context
-  let audioCtx = new(window.AudioContext || window.webkitAudioContext)();
+  // let audioCtx = new(window.AudioContext || window.webkitAudioContext)();
 
   async function playNote([frequency, duration]) {
+    var o = audioCtx.createOscillator()
+    var g = audioCtx.createGain()
+    o.frequency.value = frequency;
+    o.type = 'sine';
+    o.connect(g)
+    g.connect(audioCtx.destination)
+    o.start()
+    g.gain.setValueAtTime(0, audioCtx.currentTime);
+    g.gain.linearRampToValueAtTime(.2, audioCtx.currentTime + 0.1);
+    g.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration/1000)
+    // audioCtx.close();
+
     // create Oscillator node
-    var oscillator = audioCtx.createOscillator();
-    var gainNode = audioCtx.createGain();
-
-    oscillator.type = 'sine';
-    oscillator.frequency.value = frequency; // value in hertz
-    oscillator.connect(gainNode);
-    gainNode.connect(audioCtx.destination)
-    oscillator.start();
-
-    gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + 0.04);
-     gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.25 );
+    // var oscillator = audioCtx.createOscillator();
+    // var gainNode = audioCtx.createGain();
+    // oscillator.type = 'sine';
+    // oscillator.frequency.value = frequency; // value in hertz
+    // oscillator.connect(gainNode);
+    // gainNode.connect(audioCtx.destination)
+    // oscillator.start();
+    // gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+    // gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + duration/2/1500);
+    // gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration/1500);
   }
 
   const sleep = m => new Promise(r => setTimeout(r, m));
@@ -43,16 +55,15 @@ export function start(notes) {
     }
   }
 
-  console.log(letters);
+  // console.log(letters);
 
   // playNote([391, 287])
 
-  let oneBeat = 600;
+  let oneBeat = 600; // 60*1000/bpm
 
   const playString = async (notes) => {
     for (let i = 0; i < notes.length; i++) {
       let [ symbol, beats] = notes[i];
-      console.log(beats);
       if (symbol === ";") await sleep(oneBeat*beats);
       else playNote([letters[symbol], oneBeat*beats]);
     }

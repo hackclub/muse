@@ -11,13 +11,22 @@
 
 # TODO
 
+- [] add sample collection
+- [] add list of active muses which you can stop
+- [] set base tempo
+- [] add muse methods
+	- [] wait
+	- [] start
+	- [] stop
+- [] why does it stop working after too many calls
+- [] adding left recursion?
 - [] add loops
 - [] js interpolation
 - [] set envelope qualities
-- [] pauses
+- [x] pauses
 - [] tempo
-- [] threads
-- [] a better editor
+- [x] threads
+- [x] a better editor
 	- [] syntax highlighting
 - [] realtime controls/instruments
 - [] add h note for arbitrary hz value

@@ -71,7 +71,7 @@ const repeat = (arr, num) => [].concat(... new Array(num).fill(arr));
 
 const applyModifier = (notes, modifier) => {
 	if (modifier.type === "length") {
-		return Array.isArray(notes) ? notes.map(x => applyLengthen(x, modifier)) : applyLengthen(notes, modifier);
+		return Array.isArray(notes[0]) ? notes.map(x => applyLengthen(x, modifier)) : applyLengthen(notes, modifier);
 	} else if (modifier.type === "repeat") {
 		return repeat(notes, modifier.number);
 	}
@@ -179,24 +179,24 @@ function play() {
 }
 
 const prog = `
-// const KeyA = () => muse().play(\`
-// 	a4; a5; a6;
-// \`)
+const KeyA = () => muse().play(\`
+	[a4 c5 e5;]x7
+\`)
 
 // const KeyB = () => muse().play(\`
 // 	d4; d5; d6;
 // \`)
 
-// return {
-// 	KeyA,
+return {
+	KeyA,
 // 	KeyB
-// }
+}
 
-muse().play(\`
-	d4+
-\`)
+// muse().play(\`
+// 	[a4 c5 e5;]x7
+// \`)
 
-return {}
+// return {}
 `
 
 // muse().play(prog);
