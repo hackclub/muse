@@ -1,0 +1,31 @@
+#sample-list>li {
+    list-style: none;
+}
+
+#sample-list>li>span {
+    cursor: pointer;
+}
+
+.playing {
+    /* font-weight: bold; */
+    font-style: italic;
+}
+.playing::after {
+    content: " (playing)";
+}
+.delete {
+    color: red;
+    cursor: pointer;
+    margin-left: 1em;
+}
+.deleted {
+    visibility: hidden;
+    display: none;
+}
+.playing.sample-name::before {
+    font-style: normal;
+    content: '⏸️ ';
+}
+.sample-name::before {
+    content: '▶️ ';
+}

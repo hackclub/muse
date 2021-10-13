@@ -96,6 +96,8 @@ document.querySelector("#cm").view.dispatch({
 });
 
 
+initSamples()
+
 
 
 

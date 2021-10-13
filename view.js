@@ -98,6 +98,9 @@ export const view = (state) => html`
 		<li class="sample-item" @mousedown=${() => document.querySelector(`#wipe`).play()}>wipe</li>
 		<li class="sample-item" @mousedown=${() => document.querySelector(`#zigzag`).play()}>zigzag</li>
 	</ul>
+	<hr />
+	<em>Samples</em>
+	<ul id="sample-list"></ul>
 `
 
 
