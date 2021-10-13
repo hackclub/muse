@@ -43,64 +43,54 @@ export const view = (state) => html`
 			<button @click=${e => dispatch("REMOVE_MUSE", { index : i })}>stop</button>
 		</div>`)
 	}
-	<audio id="bubbles" src="./samples/bubbles.mp3"></audio> 
-	<audio id="clay" src="./samples/clay.mp3"></audio>
-	<audio id="confetti" src="./samples/confetti.mp3"></audio>
-	<audio id="corona" src="./samples/corona.mp3"></audio>
-	<audio id="dottedspiral" src="./samples/dottedspiral.mp3"></audio>
-	<audio id="flash1" src="./samples/flash1.mp3"></audio>
-	<audio id="flash2" src="./samples/flash2.mp3"></audio>
-	<audio id="flash3" src="./samples/flash3.mp3"></audio>
-	<audio id="glimmer" src="./samples/glimmer.mp3"></audio>
-	<audio id="moon" src="./samples/moon.mp3"></audio>
-	<audio id="pinwheel" src="./samples/pinwheel.mp3"></audio>
-	<audio id="piston1" src="./samples/piston1.mp3"></audio>
-	<audio id="piston2" src="./samples/piston2.mp3"></audio>
-	<audio id="piston3" src="./samples/piston3.mp3"></audio>
-	<audio id="prism1" src="./samples/prism1.mp3"></audio>
-	<audio id="prism2" src="./samples/prism2.mp3"></audio>
-	<audio id="prism3" src="./samples/prism3.mp3"></audio>
-	<audio id="splits" src="./samples/splits.mp3"></audio>
-	<audio id="squiggle" src="./samples/squiggle.mp3"></audio>
-	<audio id="strike" src="./samples/strike.mp3"></audio>
-	<audio id="suspension" src="./samples/suspension.mp3"></audio>
-	<audio id="timer" src="./samples/timer.mp3"></audio>
-	<audio id="ufo" src="./samples/ufo.mp3"></audio>
-	<audio id="veil" src="./samples/veil.mp3"></audio>
-	<audio id="wipe" src="./samples/wipe.mp3"></audio>
-	<audio id="zigzag" src="./samples/zigzag.mp3"></audio>
-	<div>Included Samples</div>
-	<ul>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#bubbles`).play()}>bubbles</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#clay`).play()}>clay</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#confetti`).play()}>confetti</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#corona`).play()}>corona</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#dottedspiral`).play()}>dottedspiral</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#flash1`).play()}>flash1</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#flash2`).play()}>flash2</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#flash3`).play()}>flash3</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#glimmer`).play()}>glimmer</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#moon`).play()}>moon</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#pinwheel`).play()}>pinwheel</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#piston1`).play()}>piston1</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#piston2`).play()}>piston2</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#piston3`).play()}>piston3</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#prism1`).play()}>prism1</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#prism2`).play()}>prism2</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#prism3`).play()}>prism3</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#splits`).play()}>splits</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#squiggle`).play()}>squiggle</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#strike`).play()}>strike</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#suspension`).play()}>suspension</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#timer`).play()}>timer</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#ufo`).play()}>ufo</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#veil`).play()}>veil</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#wipe`).play()}>wipe</li>
-		<li class="sample-item" @mousedown=${() => document.querySelector(`#zigzag`).play()}>zigzag</li>
-	</ul>
 	<hr />
 	<em>Samples</em>
-	<ul id="sample-list"></ul>
+	<div id="recording-button" class="${state.recordingStatus}" @click=${(e) => {
+		switch(state.recordingStatus) {
+			case "ready":
+				dispatch("START_RECORDING")
+				break;
+			case "recording":
+				dispatch("STOP_RECORDING")
+				break
+			default:
+				// someone clicked while this is 'loading' or out of state
+				break;
+		}
+	}}></div>
+	<ul id="sample-list">
+	${state.samples.map( (sample, i) => html`
+		<li class="${sample.deleted ? 'deleted' : ''}">
+			<span class="sample-name" @click=${(e) => {
+				const player = e.target.parentElement.querySelector('audio')
+				if (player.paused) {
+					player.load()
+					player.currentTime = 0
+					player.play()
+				} else {
+					player.pause()
+				}
+			}}>${sample.name}</span>
+			<audio
+				src="${sample.url}" 
+				@play=${(e) => {
+					e.target.parentElement.querySelector('.sample-name').classList.add('playing')
+				}}
+				@pause=${(e) => {
+					e.target.parentElement.querySelector('.sample-name').classList.remove('playing')
+				}}
+			></audio>
+			<span class="delete" @click="${(e) => {
+				const shouldContinue = confirm("Are you sure you want to delete this sample?")
+				if (shouldContinue) {
+					const player = e.target.parentElement.querySelector('audio')
+					player.pause()
+					dispatch("DELETE_SAMPLE", {index: i})
+				}
+			}}">x</span>
+		</li>
+	`)}
+	</ul>
 `
 
 

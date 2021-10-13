@@ -13,19 +13,19 @@ const starterSamples = [
     "clay",
     "confetti",
     "corona",
-    "dotted-spiral",
-    "flash-1",
-    "flash-2",
-    "flash-3",
+    "dottedspiral",
+    "flash1",
+    "flash2",
+    "flash3",
     "glimmer",
     "moon",
     "pinwheel",
-    "piston-1",
-    "piston-2",
-    "piston-3",
-    "prism-1",
-    "prism-2",
-    "prism-3",
+    "piston1",
+    "piston2",
+    "piston3",
+    "prism1",
+    "prism2",
+    "prism3",
     "splits",
     "squiggle",
     "strike",
@@ -34,8 +34,16 @@ const starterSamples = [
     "ufo",
     "veil",
     "wipe",
-    "zig-zag",
+    "zigzag",
 ]
+
+export function initialSamples() {
+    return starterSamples.map(name => ({
+        name,
+        url: `/samples/${name}.mp3`,
+        provided: true,
+    }))
+}
 
 function getSamples() {
     const storage = window.localStorage.getItem("samples")
@@ -49,7 +57,6 @@ function getSamples() {
 function setSample(sample, updateUI = true) {
     let newSamples = sample
     const existingSamples = getSamples() || {}
-    // const updatedSamples = { ...existingSamples, ...newSamples }
     const updatedSamples = objMerge(existingSamples, newSamples)
     window.localStorage.setItem("samples", JSON.stringify(updatedSamples))
 
@@ -57,6 +64,7 @@ function setSample(sample, updateUI = true) {
         sampleUIUpdate(updatedSamples)
     }
 }
+
 function objMerge(target, source) {
     // https://gist.github.com/ahtcx/0cd94e62691f539160b32ecda18af3d6
     for (const key in Object.keys(source)) {
@@ -70,6 +78,17 @@ function objMerge(target, source) {
     return target
 }
 
+// export const handlers = {
+//     sampleName: (e) => {
+//         const player = e.target.parentElement.querySelector('audio')
+//         if (player.paused) {
+//             player.currentTime = 0
+//             player.play()
+//         } else {
+//             player.pause()
+//         }
+//     }
+// }
 function sampleUIUpdate(sampleObj = getSamples()) {
     document.querySelector('#sample-list').replaceChildren(
         ...Object.entries(sampleObj).map(([name, fields]) => {
@@ -145,7 +164,7 @@ navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
     handlerFunction(stream)
 })
 
-let rec, audioChunks, recordedAudio
+let rec, audioChunks
 function handlerFunction(stream) {
     rec = new MediaRecorder(stream)
     rec.ondataavailable = (e) => {

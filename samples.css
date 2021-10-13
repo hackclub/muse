@@ -41,3 +41,7 @@
 #recording-button.recording::before {
     content: '⏹ End recording';
 }
+#recording-button.loading::before {
+    content: '⌛ Loading...';
+    font-style: italic;
+}
