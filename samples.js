@@ -47,21 +47,9 @@ function getSamples() {
 }
 
 function setSample(sample, updateUI=true) {
-    // let sampleArray = sample
     let newSamples = sample
-    // if (!Array.isArray) {
-    //     sampleArray = [sample]
-    // }
     const existingSamples = getSamples() || {}
     const updatedSamples = {...existingSamples, ...newSamples}
-    // sampleArray.forEach(s => {
-    //     // updatedSamples[s.name] = updatedSamples[s.name] || {}
-    //     updatedSamples[s.name] = {
-    //         url: s.url,
-    //         provided: s.provided,
-    //         deleted: s.deleted
-    //     }
-    // })
     window.localStorage.setItem("samples", JSON.stringify(updatedSamples))
 
     if (updateUI) {
@@ -70,7 +58,6 @@ function setSample(sample, updateUI=true) {
 }
 
 function sampleUIUpdate(sampleObj=getSamples()) {
-    console.log(sampleObj)
     document.querySelector('#sample-list').replaceChildren(
         ...Object.entries(sampleObj).map(([name, fields]) => {
             const el = document.createElement('li')
@@ -112,7 +99,6 @@ function sampleUIUpdate(sampleObj=getSamples()) {
                     const updateObj = {}
                     updateObj[name] = {deleted: true}
                     setSample(updateObj)
-                    // setSample({name: {deleted: true}})
                 }
             }
             el.appendChild(deleteButton)
