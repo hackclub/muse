@@ -71,32 +71,32 @@ export const view = (state) => html`
 	<audio id="zigzag" src="./samples/zigzag.mp3"></audio>
 	<div>Included Samples</div>
 	<ul>
-		<li class="sample-item" @click=${() => document.querySelector(`#bubbles`).play()}>bubbles</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#clay`).play()}>clay</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#confetti`).play()}>confetti</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#corona`).play()}>corona</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#dottedspiral`).play()}>dottedspiral</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#flash1`).play()}>flash1</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#flash2`).play()}>flash2</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#flash3`).play()}>flash3</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#glimmer`).play()}>glimmer</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#moon`).play()}>moon</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#pinwheel`).play()}>pinwheel</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#piston1`).play()}>piston1</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#piston2`).play()}>piston2</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#piston3`).play()}>piston3</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#prism1`).play()}>prism1</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#prism2`).play()}>prism2</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#prism3`).play()}>prism3</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#splits`).play()}>splits</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#squiggle`).play()}>squiggle</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#strike`).play()}>strike</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#suspension`).play()}>suspension</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#timer`).play()}>timer</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#ufo`).play()}>ufo</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#veil`).play()}>veil</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#wipe`).play()}>wipe</li>
-		<li class="sample-item" @click=${() => document.querySelector(`#zigzag`).play()}>zigzag</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#bubbles`).play()}>bubbles</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#clay`).play()}>clay</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#confetti`).play()}>confetti</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#corona`).play()}>corona</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#dottedspiral`).play()}>dottedspiral</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#flash1`).play()}>flash1</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#flash2`).play()}>flash2</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#flash3`).play()}>flash3</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#glimmer`).play()}>glimmer</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#moon`).play()}>moon</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#pinwheel`).play()}>pinwheel</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#piston1`).play()}>piston1</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#piston2`).play()}>piston2</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#piston3`).play()}>piston3</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#prism1`).play()}>prism1</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#prism2`).play()}>prism2</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#prism3`).play()}>prism3</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#splits`).play()}>splits</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#squiggle`).play()}>squiggle</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#strike`).play()}>strike</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#suspension`).play()}>suspension</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#timer`).play()}>timer</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#ufo`).play()}>ufo</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#veil`).play()}>veil</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#wipe`).play()}>wipe</li>
+		<li class="sample-item" @mousedown=${() => document.querySelector(`#zigzag`).play()}>zigzag</li>
 	</ul>
 `
 
