@@ -1,7 +1,6 @@
 import { getLetters } from "./letters.js";
 import { parse, tokenize } from "./parser.js";
 import { compile } from "./compile.js";
-import { patatapSamples } from "./patatapSamples.js";
 
 const sleep = m => new Promise(r => setTimeout(r, m));
 
@@ -9,7 +8,7 @@ const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
 class Muse {
-	constructor({ bpm, volume, synthOptions }) {
+	constructor(samples, { bpm, volume, synthOptions }) {
 		bpm = bpm ?? 110;
 		volume = volume ?? 100;
 		// const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -19,7 +18,7 @@ class Muse {
 		this.volume = volume;
 		// asdr
 
-		this.samples = { ...patatapSamples, ...getLetters(synthOptions) };
+		this.samples = { ...samples, ...getLetters(synthOptions) };
 	}
 
 	async play(prog) {
@@ -47,8 +46,8 @@ class Muse {
 }
 
 
-export const createMuse = (ops = {}) => {
-	const newMuse = new Muse(ops);
+export const createMuse = samples => (ops = {}) => {
+	const newMuse = new Muse(samples, ops);
 	// dispatch("ADD_ACTIVE_MUSE", { newMuse })
 
 	return newMuse;

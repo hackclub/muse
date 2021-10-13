@@ -45,3 +45,7 @@
     content: '⌛ Loading...';
     font-style: italic;
 }
+#recording-button.pre-permission::before {
+    content: 'No Permission';
+    font-style: italic;
+}

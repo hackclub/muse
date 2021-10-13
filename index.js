@@ -31,9 +31,14 @@ async function init(args, state) {
 	});
 
 
+	dispatch("RENDER")
+
 	const stream = await navigator
 		.mediaDevices
 		.getUserMedia({ audio: true })
+
+	state.recordingStatus = "ready";
+	dispatch("RENDER");
 
 	rec = new MediaRecorder(stream)
     rec.ondataavailable = (e) => {
@@ -43,14 +48,12 @@ async function init(args, state) {
             sendData(blob)
         }
     }
-
-	dispatch("RENDER")
 }
 
 const STATE = {
 	activeMuses: [],
 	samples: initialSamples(),
-	recordingStatus: "ready",
+	recordingStatus: "pre-permission",
 }
 
 async function sendData(data) {
@@ -105,7 +108,16 @@ window.dispatch = dispatch;
 
 dispatch("INIT");
 
-const included = { createMuse }
+function playSample(name, context) {
+	const audio = document.querySelector(`#${name}-audio`);
+	audio.play();
+}
+
+
+const included = { createMuse: createMuse(STATE.samples.reduce((acc, cur) => {
+	acc[cur.name] = (duration, ctx) => playSample(cur.name, duration, ctx);
+	return acc;
+}, {})) }
 
 
 function play() {
