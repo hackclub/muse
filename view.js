@@ -72,6 +72,7 @@ export const view = (state) => html`
 				}
 			}}>${sample.name}</span>
 			<audio
+				id="${sample.name}-audio"
 				src="${sample.url}" 
 				@play=${(e) => {
 					e.target.parentElement.querySelector('.sample-name').classList.add('playing')

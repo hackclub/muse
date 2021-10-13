@@ -1,5 +1,5 @@
-export function playSample(id, context) {
-	const audio = document.querySelector(`#${id}`);
+export function playSample(name, context) {
+	const audio = document.querySelector(`#${name}-audio`);
 	// const source = context.createMediaElementSource(audio);
  //    var g = context.createGain()
  //    source.connect(g)
