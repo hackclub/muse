@@ -46,6 +46,7 @@ listenBody("keydown", "", (e) => {
 function play() {
 	const cm = document.querySelector("#cm");
 	const prog = cm.view.state.doc.toString();
+	window.localStorage.setItem("svg-pcb", prog)
 	const f = new Function(...Object.keys(included), prog)
 	const result = f(...Object.values(included));
 	console.log("Attaching keys:", result);
@@ -88,8 +89,10 @@ return {
 
 `
 
+const saved = window.localStorage.getItem("muse")
+console.log(saved);
 document.querySelector("#cm").view.dispatch({
-  changes: { from: 0, insert: prog.trim() }
+  changes: { from: 0, insert: !saved ? prog.trim() : saved }
 });
 
 
