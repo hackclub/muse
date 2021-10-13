@@ -49,12 +49,25 @@ function getSamples() {
 function setSample(sample, updateUI = true) {
     let newSamples = sample
     const existingSamples = getSamples() || {}
-    const updatedSamples = { ...existingSamples, ...newSamples }
+    // const updatedSamples = { ...existingSamples, ...newSamples }
+    const updatedSamples = objMerge(existingSamples, newSamples)
     window.localStorage.setItem("samples", JSON.stringify(updatedSamples))
 
     if (updateUI) {
         sampleUIUpdate(updatedSamples)
     }
+}
+function objMerge(target, source) {
+    // https://gist.github.com/ahtcx/0cd94e62691f539160b32ecda18af3d6
+    for (const key in Object.keys(source)) {
+        console.log(key)
+        if (source[key] instanceof Object) {
+            console.log(target[key], source[key])
+            Object.assign(source[key], merge(target[key], source[key]))
+        }
+    }
+    Object.assign(target || {}, source)
+    return target
 }
 
 function sampleUIUpdate(sampleObj = getSamples()) {
