@@ -29,3 +29,15 @@
 .sample-name::before {
     content: '▶️ ';
 }
+
+#recording-button {
+    cursor: pointer;
+    font-weight: bold;
+}
+#recording-button.ready::before {
+    content: '⏺️ Record new sample';
+}
+
+#recording-button.recording::before {
+    content: '⏹ End recording';
+}

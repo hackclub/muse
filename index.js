@@ -2,6 +2,7 @@ import { render } from "https://unpkg.com/lit-html@2.0.1/lit-html.js";
 import { delegate } from "./delegate.js";
 import { createMuse } from "./Muse.js";
 import { view } from "./view.js";
+import { initSamples } from "./samples.js";
 
 const STATE = {
 	activeMuses: []

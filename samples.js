@@ -41,15 +41,15 @@ function getSamples() {
     const storage = window.localStorage.getItem("samples")
     try {
         return JSON.parse(storage)
-    } catch(e) {
+    } catch (e) {
         return null
     }
 }
 
-function setSample(sample, updateUI=true) {
+function setSample(sample, updateUI = true) {
     let newSamples = sample
     const existingSamples = getSamples() || {}
-    const updatedSamples = {...existingSamples, ...newSamples}
+    const updatedSamples = { ...existingSamples, ...newSamples }
     window.localStorage.setItem("samples", JSON.stringify(updatedSamples))
 
     if (updateUI) {
@@ -57,7 +57,7 @@ function setSample(sample, updateUI=true) {
     }
 }
 
-function sampleUIUpdate(sampleObj=getSamples()) {
+function sampleUIUpdate(sampleObj = getSamples()) {
     document.querySelector('#sample-list').replaceChildren(
         ...Object.entries(sampleObj).map(([name, fields]) => {
             const el = document.createElement('li')
@@ -97,7 +97,7 @@ function sampleUIUpdate(sampleObj=getSamples()) {
                 const shouldContinue = confirm('Are you sure you want to delete this sample?')
                 if (shouldContinue) {
                     const updateObj = {}
-                    updateObj[name] = {deleted: true}
+                    updateObj[name] = { deleted: true }
                     setSample(updateObj)
                 }
             }
@@ -106,6 +106,58 @@ function sampleUIUpdate(sampleObj=getSamples()) {
         })
     )
 }
+
+function createRecordingUI() {
+    const el = document.querySelector('#recording-button')
+    el.id = 'recording-button'
+    el.classList.add('ready')
+
+    el.onclick = () => {
+        const currentlyRecording = el.classList.contains('recording')
+        if (currentlyRecording) {
+            el.classList.remove('recording')
+            el.classList.add('ready')
+            rec.stop()
+        } else {
+            el.classList.remove('ready')
+            el.classList.add('recording')
+            audioChunks = []
+            rec.start()
+        }
+    }
+}
+
+
+navigator.mediaDevices.getUserMedia({ audio: true }).then((stream) => {
+    handlerFunction(stream)
+})
+
+let rec, audioChunks, recordedAudio
+function handlerFunction(stream) {
+    rec = new MediaRecorder(stream)
+    rec.ondataavailable = (e) => {
+        audioChunks.push(e.data)
+        if (rec.state == "inactive") {
+            let blob = new Blob(audioChunks, { type: "audio/mpeg-3" })
+            sendData(blob)
+        }
+    }
+}
+
+async function sendData(data) {
+    const body = new FormData()
+    body.append('sound',data)
+    const upload = await fetch('https://sound-sampler.maxwofford.repl.co/upload-sound', {
+      method: 'POST',
+      body
+    }).then(r => r.json())
+    const url = 'https://sound-sampler.maxwofford.repl.co/' + upload.data.filename
+    const sampleObj = {}
+    const name = Math.random().toString(36).substring(2, 15)
+    sampleObj[name] = {url, provided: false}
+    setSample(sampleObj)
+  }
+
 
 export function initSamples() {
     if (getSamples() === null) {
@@ -121,4 +173,5 @@ export function initSamples() {
     } else {
         sampleUIUpdate()
     }
+    createRecordingUI()
 }
