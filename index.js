@@ -3,6 +3,7 @@ import { delegate } from "./delegate.js";
 import { createMuse } from "./Muse.js";
 import { view } from "./view.js";
 import { initialSamples } from "./samples.js";
+import { defaultProg } from "./defaultProg.js";
 
 const listenBody = delegate(document.body);
 
@@ -26,7 +27,7 @@ async function init(args, state) {
 
 	const saved = window.localStorage.getItem("muse")
 	document.querySelector("#cm").view.dispatch({
-	  changes: { from: 0, insert: !saved ? prog.trim() : saved }
+	  changes: { from: 0, insert: !saved ? defaultProg.trim() : saved }
 	});
 
 
@@ -132,26 +133,6 @@ function play() {
 	}, true)
 
 }
-
-const prog = `
-const KeyA = () => createMuse().play(\`
-	[a4 c5 e5;]-x7
-\`)
-
-const KeyB = () => createMuse().play(\`
-	d4; d5; d6;
-\`)
-
-createMuse().play(\`
-	c
-\`)
-
-return {
-	KeyA,
-	KeyB
-}
-
-`
 
 
 
