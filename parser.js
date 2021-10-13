@@ -224,8 +224,6 @@ const modifier = s => or([
 
 const parse = many(p);
 
-const con = ([x, rest]) => ({type: "number", val: x[0]})
-
 export { parse, tokenize };
 
 

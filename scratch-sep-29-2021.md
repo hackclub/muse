@@ -1,3 +1,8 @@
+// https://www.google.com/search?q=note+frequency+chart&sxsrf=AOaemvKG6SCFR2ruFdEKYGq1pm6PxpitJg:1632850737102&tbm=isch&source=iu&ictx=1&fir=AhFnzq-f3c0WjM%252CLstW4q-3PfXraM%252C_%253B7vgWxzyXPVj48M%252CPqtZQjqKQnoeGM%252C_%253B5ocRy-vjOognJM%252CluDsl3gAlXaWAM%252C_%253B4pmdoRIMmNH05M%252CL-NnW0qsTaBOtM%252C_%253B9w1Cv1irDiHiOM%252CwR2NZpb62u0BbM%252C_%253BKk4bGu4AKVD3BM%252CJXeFIodjyDvuDM%252C_%253Bzfg8LxzKJS3JMM%252CLstW4q-3PfXraM%252C_%253ByGc-0mYKPUus9M%252C6f_97sxBUyCKcM%252C_%253Bv6Dci4dmwtInnM%252CjM1jNvtQfOtpQM%252C_%253BXC1dYBjZkGiI_M%252CFEUrsNoEJoTCdM%252C_%253BilvAst15XR3LjM%252Cnisd_luyJKn9zM%252C_%253BkF5mKgMg5n4SKM%252CzjnUcN_x9AQwvM%252C_%253BwocSq-Avd0xGTM%252CL-NnW0qsTaBOtM%252C_%253BsJcJBsQEHGZg8M%252CwD-3NW4Pr5S3kM%252C_&vet=1&usg=AI4_-kSoXJMFaknXQhihsmk7J0H8dj8ohw&sa=X&ved=2ahUKEwiyqp-Bm6LzAhULFlkFHQXeDE0Q9QF6BAgdEAE&biw=1353&bih=796&dpr=2#imgrc=7vgWxzyXPVj48M
+// pitch
+// us: a4
+// ABC: A, A a a'
+
 for 10 {
   (g3 e4) 
   d4 
