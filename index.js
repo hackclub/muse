@@ -47,6 +47,8 @@ const ACTIONS = {
 	ADD_PLAYED: ({symbol}, state) => {
 		state.played.push(symbol);
 		dispatch("RENDER");
+		const el = document.querySelector(".played-log");
+   		el.scrollTop = el.scrollHeight - el.clientHeight;
 	},
 	PLAY: (args, state) => {
 		play(state);
