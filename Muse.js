@@ -60,6 +60,7 @@ async function play(prog, that) {
 
 	for (let i = 0; i < result.length; i++) {
 	  let [ symbol, beats] = result[i];
+	  dispatch("ADD_PLAYED", { symbol });
 	  if (symbol === ";") await sleep(60*1000/that.bpm*beats);
 	  else if (symbol in that.samples) that.samples[symbol](60*1000/that.bpm*beats, that.audioCtx);
 	}

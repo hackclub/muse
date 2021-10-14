@@ -11,6 +11,7 @@ export const view = (state) => html`
 			<button @click=${e => dispatch("REMOVE_MUSE", { index : i })}>stop</button>
 		</div>`)
 	}
+	<div class="played-log">${state.played.join(" ")}</div>
 	<hr />
 	<em>Samples</em>
 	<div id="recording-button" class="${state.recordingStatus}" @click=${(e) => {

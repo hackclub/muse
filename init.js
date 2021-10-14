@@ -3,7 +3,6 @@ import { defaultProg } from "./defaultProg.js";
 
 const listenBody = delegate(document.body);
 
-let rec;
 let audioChunks = [];
 
 export async function init(args, state) {
@@ -39,10 +38,10 @@ export async function init(args, state) {
 	state.recordingStatus = "ready";
 	dispatch("RENDER");
 
-	rec = new MediaRecorder(stream)
-    rec.ondataavailable = (e) => {
+	state.rec = new MediaRecorder(stream)
+    state.rec.ondataavailable = (e) => {
         audioChunks.push(e.data)
-        if (rec.state == "inactive") {
+        if (state.rec.state == "inactive") {
             let blob = new Blob(audioChunks, { type: "audio/mpeg-3" })
             sendData(blob)
         }

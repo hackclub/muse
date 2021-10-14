@@ -1,3 +1,4 @@
+
 const key = 4
 
 const KeyA = () => createMuse().play(`a${key}`)
@@ -10,4 +11,4 @@ const KeyJ = () => createMuse().play(`g${key+1}`)
 const KeyK = () => createMuse().play(`a${key+1}`)
 const KeyL = () => createMuse().play(`b${key+1}`)
 
-return { KeyA, KeyS, KeyD, KeyF, KeyG, KeyH, KeyJ, KeyV, KeyK, KeyL }
+return { KeyA, KeyS, KeyD, KeyF, KeyG, KeyH, KeyJ, KeyK, KeyL }

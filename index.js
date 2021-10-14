@@ -12,7 +12,9 @@ const STATE = {
 	activeMuses: [],
 	samples: initialSamples(),
 	recordingStatus: "pre-permission",
-	sampleVolume: 0.35
+	sampleVolume: 0.35,
+	rec: undefined,
+	played: [],
 }
 
 
@@ -27,7 +29,7 @@ const ACTIONS = {
 		dispatch("RENDER");
 	},
 	START_RECORDING: (args, state) => {
-		rec.start()
+		state.rec.start()
 		state.recordingStatus = "recording"
 		dispatch("RENDER");
 	},
@@ -40,7 +42,11 @@ const ACTIONS = {
 		state.recordingStatus = "loading"
 		dispatch("RENDER") // force re-render
 
-		await rec.stop()
+		await state.rec.stop()
+	},
+	ADD_PLAYED: ({symbol}, state) => {
+		state.played.push(symbol);
+		dispatch("RENDER");
 	},
 	PLAY: (args, state) => {
 		play(state);

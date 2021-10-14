@@ -27,3 +27,8 @@
 .sample-item:hover {
 	cursor: pointer;
 }
+
+.played-log {
+	max-height: 100px;
+	overflow: scroll;
+}
