@@ -57,6 +57,7 @@ const STATE = {
 	activeMuses: [],
 	samples: initialSamples(),
 	recordingStatus: "pre-permission",
+	sampleVolume: 0.35
 }
 
 function makeId(length) {
@@ -124,6 +125,7 @@ dispatch("INIT");
 
 function playSample(name, context) {
 	const audio = document.querySelector(`#${name}-audio`);
+	audio.volume = STATE.sampleVolume;
 	audio.currentTime = 0;
 	audio.play();
 }
@@ -139,7 +141,7 @@ function play() {
 	const cm = document.querySelector("#cm");
 	const prog = cm.view.state.doc.toString();
 	window.localStorage.setItem("muse-prog", prog);
-	
+
 	window.localStorage.setItem("muse-samples", JSON.stringify(STATE.samples));
 
 	const included = makeIncluded();

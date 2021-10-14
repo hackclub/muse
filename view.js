@@ -31,6 +31,7 @@ export const view = (state) => html`
 		<li class="${sample.deleted ? 'deleted' : ''}">
 			<span class="sample-name" @click=${(e) => {
 				const audio = document.querySelector(`#${sample.name}-audio`)
+				audio.volume = state.sampleVolume;
 				audio.currentTime = 0;
 				audio.play()
 			}}>${sample.name}</span>
