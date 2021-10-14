@@ -2,38 +2,6 @@ import { html } from "https://unpkg.com/lit-html@2.0.1/lit-html.js";
 import "https://leomcelroy.com/widgets/code-mirror.js"
 
 export const view = (state) => html`
-	<style>
-		.cm-wrap { 
-			min-height: max-content; 
-			border: 1px solid #ddd;
-	    	resize: vertical;
-	    	overflow: auto;
-		}
-		.cm-scroller { overflow: auto; }
-		.ͼd {
-			color: #973e1b;
-		}
-
-		.ͼl {
-		   	color: #a1a09f;
-		}
-
-		.button-container {
-			width: 100%;
-			display: grid;
-			place-content: center;
-		}
-
-		.trigger-play {
-			width: 100%;
-    		margin: 5px;
-		}
-
-		.sample-item:hover {
-			cursor: pointer;
-		}
-	</style>
-
 	<code-mirror id="cm"></code-mirror>
 	<div class="button-container">
 		<button class="trigger-play">play/attach</button>
@@ -62,14 +30,9 @@ export const view = (state) => html`
 	${state.samples.map( (sample, i) => html`
 		<li class="${sample.deleted ? 'deleted' : ''}">
 			<span class="sample-name" @click=${(e) => {
-				const player = e.target.parentElement.querySelector('audio')
-				if (player.paused) {
-					player.load()
-					player.currentTime = 0
-					player.play()
-				} else {
-					player.pause()
-				}
+				const audio = document.querySelector(`#${sample.name}-audio`)
+				audio.currentTime = 0;
+				audio.play()
 			}}>${sample.name}</span>
 			<audio
 				id="${sample.name}-audio"
@@ -84,8 +47,7 @@ export const view = (state) => html`
 			<span class="delete" @click="${(e) => {
 				const shouldContinue = confirm("Are you sure you want to delete this sample?")
 				if (shouldContinue) {
-					const player = e.target.parentElement.querySelector('audio')
-					player.pause()
+					document.querySelector(`#${sample.name}-audio`).pause()
 					dispatch("DELETE_SAMPLE", {index: i})
 				}
 			}}">x</span>

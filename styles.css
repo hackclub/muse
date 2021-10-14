@@ -1,0 +1,29 @@
+.cm-wrap { 
+	min-height: max-content; 
+	border: 1px solid #ddd;
+	resize: vertical;
+	overflow: auto;
+}
+.cm-scroller { overflow: auto; }
+.ͼd {
+	color: #973e1b;
+}
+
+.ͼl {
+   	color: #a1a09f;
+}
+
+.button-container {
+	width: 100%;
+	display: grid;
+	place-content: center;
+}
+
+.trigger-play {
+	width: 100%;
+	margin: 5px;
+}
+
+.sample-item:hover {
+	cursor: pointer;
+}

@@ -25,10 +25,13 @@ async function init(args, state) {
 		}
 	})
 
-	const saved = window.localStorage.getItem("muse")
+	const saved = window.localStorage.getItem("muse-prog")
 	document.querySelector("#cm").view.dispatch({
 	  changes: { from: 0, insert: !saved ? defaultProg.trim() : saved }
 	});
+
+	const savedSamples = window.localStorage.getItem("muse-samples");
+	if (savedSamples) state.samples = JSON.parse(savedSamples);
 
 
 	dispatch("RENDER")
@@ -56,6 +59,17 @@ const STATE = {
 	recordingStatus: "pre-permission",
 }
 
+function makeId(length) {
+    var result           = '';
+    var characters       = 'abcdefghijklmnopqrstuvwxyz';
+    var numbers = "0123456789"
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+}
+
 async function sendData(data) {
     const body = new FormData()
     body.append('sound',data)
@@ -65,7 +79,7 @@ async function sendData(data) {
     }).then(r => r.json())
     const url = 'https://sound-sampler.maxwofford.repl.co/' + upload.data.filename
     const sampleObj = {}
-    const name = Math.random().toString(36).substring(2, 15)
+    const name = makeId(4);
 	dispatch("ADD_SAMPLE", { name, url, provided: false})
     // sampleObj[name] = {url, provided: false}
     // setSample(sampleObj)
@@ -110,20 +124,25 @@ dispatch("INIT");
 
 function playSample(name, context) {
 	const audio = document.querySelector(`#${name}-audio`);
+	audio.currentTime = 0;
 	audio.play();
 }
 
 
-const included = { createMuse: createMuse(STATE.samples.reduce((acc, cur) => {
+const makeIncluded = () => ({ createMuse: createMuse(STATE.samples.reduce((acc, cur) => {
 	acc[cur.name] = (duration, ctx) => playSample(cur.name, duration, ctx);
 	return acc;
-}, {})) }
+}, {})) })
 
 
 function play() {
 	const cm = document.querySelector("#cm");
 	const prog = cm.view.state.doc.toString();
-	window.localStorage.setItem("muse", prog);
+	window.localStorage.setItem("muse-prog", prog);
+	
+	window.localStorage.setItem("muse-samples", JSON.stringify(STATE.samples));
+
+	const included = makeIncluded();
 	const f = new Function(...Object.keys(included), prog)
 	const result = f(...Object.values(included));
 	console.log("Attaching keys:", result);
@@ -138,6 +157,7 @@ function play() {
 
 		if (e.target.getAttribute("role") === "textbox") return;
 
+		console.log(code);
 		if (code in result) {
 			result[code]();
 		}

@@ -19,23 +19,24 @@ class Muse {
 		// asdr
 
 		this.samples = { ...samples, ...getLetters(synthOptions) };
+
+		// this.current = null;
 	}
 
-	async play(prog) {
-		const toks = tokenize(prog);
-		console.log("tokens:\n", toks)
-		const [ ast, remainder ] = parse(toks);
-		console.log("ast:\n", ast);
-		console.log("remainder:\n", remainder);
-		
-		const result = compile(ast);
-		console.log(result);
+	play(...progs) {
+		// (async () => {
+		// 	console.log(this.current);
+		// 	if (this.current !== null) {
+		// 		await this.current;
+		// 		this.current = null;
+		// 	}
 
-		for (let i = 0; i < result.length; i++) {
-		  let [ symbol, beats] = result[i];
-		  if (symbol === ";") await sleep(60*1000/this.bpm*beats);
-		  else if (symbol in this.samples) this.samples[symbol](60*1000/this.bpm*beats, this.audioCtx);
-		}
+		// 	console.log(this.current);
+
+		// 	this.current = Promise.all([ progs.map(prog => play(prog, this)) ]);
+		// })()
+
+		progs.map(prog => play(prog, this));
 
 		return this;
 	}
@@ -43,6 +44,25 @@ class Muse {
 	stop() {
 
 	}
+}
+
+async function play(prog, that) {
+	const toks = tokenize(prog);
+	console.log("tokens:\n", toks)
+	const [ ast, remainder ] = parse(toks);
+	console.log("ast:\n", ast);
+	console.log("remainder:\n", remainder);
+	
+	const result = compile(ast);
+	console.log(result);
+
+	for (let i = 0; i < result.length; i++) {
+	  let [ symbol, beats] = result[i];
+	  if (symbol === ";") await sleep(60*1000/that.bpm*beats);
+	  else if (symbol in that.samples) that.samples[symbol](60*1000/that.bpm*beats, that.audioCtx);
+	}
+
+	return that;
 }
 
 
