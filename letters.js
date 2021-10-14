@@ -28,7 +28,7 @@ async function playNote(frequency, duration, ctx, ops = {}) {
   g.connect(ctx.destination)
   o.start()
   g.gain.setValueAtTime(0, ctx.currentTime);
-  g.gain.linearRampToValueAtTime(.2, ctx.currentTime + 0.1);
+  g.gain.linearRampToValueAtTime(.2, ctx.currentTime + duration/5/1000);
   g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + duration/1000)
   // o.stop();
   // audioCtx.close();

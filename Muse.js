@@ -55,7 +55,7 @@ async function play(prog, that) {
 	console.log("ast:\n", ast);
 	console.log("remainder:\n", remainder);
 	
-	const result = compile(ast);
+	const result = compile(ast).map(x => x.value);
 	console.log(result);
 
 	for (let i = 0; i < result.length; i++) {

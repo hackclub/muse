@@ -2,13 +2,16 @@ const lengthen = modifier => modifier.value.includes("-")
 	? 1/2**(modifier.value.length)
 	: 2**modifier.value.length;
 
-const applyLengthen = (note, modifier) => [note[0], note[1] * lengthen(modifier)]
+const applyLengthen = (note, modifier) => ({ 
+	type: "beat", 
+	value: [note.value[0], note.value[1] * lengthen(modifier)]
+})
 
 const repeat = (arr, num) => [].concat(... new Array(num).fill(arr));
 
 const applyModifier = (notes, modifier) => {
 	if (modifier.type === "length") {
-		return Array.isArray(notes[0]) ? notes.map(x => applyLengthen(x, modifier)) : applyLengthen(notes, modifier);
+		return Array.isArray(notes) ? notes.map(x => applyLengthen(x, modifier)) : applyLengthen(notes, modifier);
 	} else if (modifier.type === "repeat") {
 		return repeat(notes, modifier.number);
 	}
@@ -16,8 +19,10 @@ const applyModifier = (notes, modifier) => {
 
 const compileNode = node => {
 	if (Array.isArray(node)) return compile(node);
-	else if (node.type === "symbol" || node.type === ";") return [ node.value, 1 ]
-	else if (node.type === "modifier") return applyModifier(compileNode(node.notes), node.modifier)
+	else if (node.type === "symbol" || node.type === ";") return { type: "beat", value: [ node.value, 1 ] }
+	else if (node.type === "modifier") return node.modifiers.reduce( (acc, cur) => {
+			return applyModifier(acc, cur);
+		}, compileNode(node.notes))
 }
 
 export const compile = ast => {
@@ -27,7 +32,7 @@ export const compile = ast => {
 		let current = ast[i];
 		let compiled = compileNode(current);
 
-		if (Array.isArray(compiled[0])) result.push(...compiled)
+		if (Array.isArray(compiled)) result.push(...compiled)
 		else result.push(compiled);
 
 		i++;

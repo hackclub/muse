@@ -202,8 +202,8 @@ const convertModifier = x => Array.isArray(x)
   ? { type: "repeat", number: Number(x[1].value) }
   : x;
 
-const convertModifier0 = x => x[3] === null ? x[1] : ({ type: "modifier", notes: x[1], modifier: x[3] })
-const convertModifier1 = x => x[1] === null ? x[0] : ({ type: "modifier", notes: x[0], modifier: x[1] })
+const convertModifier0 = x => x[3] === null ? x[1] : ({ type: "modifier", notes: x[1], modifiers: x[3] })
+const convertModifier1 = x => x[1] === null ? x[0] : ({ type: "modifier", notes: [x[0]], modifiers: x[1] })
 
 const p = s => or([
   and([ "[", many(p), "]", opt(modifier)], convertModifier0),
@@ -217,10 +217,10 @@ const note = s => or([
   ";"
 ])(s);
 
-const modifier = s => or([
+const modifier = s => many(or([
   and(["x", "number"]),
   "length"
-], convertModifier)(s)
+], convertModifier))(s)
 
 const parse = many(p);
 
