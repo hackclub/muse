@@ -4,54 +4,10 @@ import { createMuse } from "./Muse.js";
 import { view } from "./view.js";
 import { initialSamples } from "./samples.js";
 import { defaultProg } from "./defaultProg.js";
+import { init } from "./init.js";
+import "./test.js";
 
 const listenBody = delegate(document.body);
-
-let rec;
-let audioChunks = [];
-
-async function init(args, state) {
-	dispatch("RENDER");
-
-	listenBody("click", ".trigger-play", () => {
-		play();
-	})
-
-	listenBody("keydown", "", (e) => {
-		let code = event.code;
-		if (code === "Enter" && event.shiftKey) {
-		  event.preventDefault();
-		  play();
-		}
-	})
-
-	const saved = window.localStorage.getItem("muse-prog")
-	document.querySelector("#cm").view.dispatch({
-	  changes: { from: 0, insert: !saved ? defaultProg.trim() : saved }
-	});
-
-	const savedSamples = window.localStorage.getItem("muse-samples");
-	if (savedSamples) state.samples = JSON.parse(savedSamples);
-
-
-	dispatch("RENDER")
-
-	const stream = await navigator
-		.mediaDevices
-		.getUserMedia({ audio: true })
-
-	state.recordingStatus = "ready";
-	dispatch("RENDER");
-
-	rec = new MediaRecorder(stream)
-    rec.ondataavailable = (e) => {
-        audioChunks.push(e.data)
-        if (rec.state == "inactive") {
-            let blob = new Blob(audioChunks, { type: "audio/mpeg-3" })
-            sendData(blob)
-        }
-    }
-}
 
 const STATE = {
 	activeMuses: [],
@@ -60,49 +16,26 @@ const STATE = {
 	sampleVolume: 0.35
 }
 
-function makeId(length) {
-    var result           = '';
-    var characters       = 'abcdefghijklmnopqrstuvwxyz';
-    var numbers = "0123456789"
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-}
-
-async function sendData(data) {
-    const body = new FormData()
-    body.append('sound',data)
-    const upload = await fetch('https://sound-sampler.maxwofford.repl.co/upload-sound', {
-      method: 'POST',
-      body
-    }).then(r => r.json())
-    const url = 'https://sound-sampler.maxwofford.repl.co/' + upload.data.filename
-    const sampleObj = {}
-    const name = makeId(4);
-	dispatch("ADD_SAMPLE", { name, url, provided: false})
-    // sampleObj[name] = {url, provided: false}
-    // setSample(sampleObj)
-  }
-
 
 const ACTIONS = {
 	INIT: init,
-	RENDER: (args, state) => {},
+	RENDER: (args, state) => { render(view(STATE), document.body) },
 	ADD_ACTIVE_MUSE: ({ newMuse }, state) => {
 		state.activeMuses.push(newMuse);
 	},
 	DELETE_SAMPLE: ({index}, state) => {
 		state.samples[index].deleted = true;
+		dispatch("RENDER");
 	},
 	START_RECORDING: (args, state) => {
 		rec.start()
 		state.recordingStatus = "recording"
+		dispatch("RENDER");
 	},
 	ADD_SAMPLE: (sample, state) => {
 		state.recordingStatus = "ready"
 		state.samples.push(sample)
+		dispatch("RENDER");
 	},
 	STOP_RECORDING: async (args, state) => {
 		state.recordingStatus = "loading"
@@ -110,56 +43,55 @@ const ACTIONS = {
 
 		await rec.stop()
 	},
+	PLAY: (args, state) => {
+		play(state);
+	}
 }
 
 const dispatch = (action, args) => {
-	if (action in ACTIONS) {
-		ACTIONS[action](args, STATE);
-		render(view(STATE), document.body)
-	} else console.error("Unrecongized action:", action);
+	if (action in ACTIONS) ACTIONS[action](args, STATE);
+	else console.error("Unrecongized action:", action);
 }
 
 window.dispatch = dispatch;
 
 dispatch("INIT");
 
-function playSample(name, context) {
+function playSample(name, context, state) {
 	const audio = document.querySelector(`#${name}-audio`);
-	audio.volume = STATE.sampleVolume;
+	audio.volume = state.sampleVolume;
 	audio.currentTime = 0;
 	audio.play();
 }
 
 
-const makeIncluded = () => ({ createMuse: createMuse(STATE.samples.reduce((acc, cur) => {
-	acc[cur.name] = (duration, ctx) => playSample(cur.name, duration, ctx);
+const makeIncluded = (state) => ({ createMuse: createMuse(state.samples.reduce((acc, cur) => {
+	acc[cur.name] = (duration, ctx) => playSample(cur.name, ctx, state);
 	return acc;
 }, {})) })
 
 
-function play() {
+function play(state) {
 	const cm = document.querySelector("#cm");
 	const prog = cm.view.state.doc.toString();
 	window.localStorage.setItem("muse-prog", prog);
 
-	window.localStorage.setItem("muse-samples", JSON.stringify(STATE.samples));
+	window.localStorage.setItem("muse-samples", JSON.stringify(state.samples));
 
-	const included = makeIncluded();
+	const included = makeIncluded(state);
 	const f = new Function(...Object.keys(included), prog)
-	const result = f(...Object.values(included));
-	console.log("Attaching keys:", result);
+	const result = new f(...Object.values(included));
 
 	listenBody("keydown", "", (e) => {
 		let code = event.code;
 
 		if (code === "Enter" && event.shiftKey) {
 			event.preventDefault();
-	  		play();
+	  		play(state);
 		}
 
 		if (e.target.getAttribute("role") === "textbox") return;
 
-		console.log(code);
 		if (code in result) {
 			result[code]();
 		}

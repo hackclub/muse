@@ -8,9 +8,11 @@ const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
 class Muse {
-	constructor(samples, { bpm, volume, synthOptions }) {
+	constructor(samples, { bpm, volume, type }) {
 		bpm = bpm ?? 110;
 		volume = volume ?? 100;
+		type = type ?? "sine";
+		const synthOptions = { type }
 		// const AudioContext = window.AudioContext || window.webkitAudioContext;
 		// this.audioCtx = new AudioContext();
 		this.audioCtx = audioCtx;
