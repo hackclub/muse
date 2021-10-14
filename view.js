@@ -16,7 +16,7 @@ export const view = (state) => html`
 		</div>
 		<div class="left-editor">
 			<div>
-				Played Notes:
+				<em>Played Notes</em>
 				<div class="played-log">${state.played.join(" ")}</div>
 			</div>
 			${drawSamples(state)}

@@ -58,7 +58,7 @@ body {
 }
 
 .samples {
-	padding: 5px;
+	margin: 5px;
 	overflow: scroll;
 }
 
