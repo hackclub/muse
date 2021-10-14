@@ -1,4 +1,5 @@
 import { delegate } from "./delegate.js";
+import { defaultProg } from "./defaultProg.js";
 
 const listenBody = delegate(document.body);
 

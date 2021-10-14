@@ -3,7 +3,6 @@ import { delegate } from "./delegate.js";
 import { createMuse } from "./Muse.js";
 import { view } from "./view.js";
 import { initialSamples } from "./samples.js";
-import { defaultProg } from "./defaultProg.js";
 import { init } from "./init.js";
 import "./test.js";
 
