@@ -10,7 +10,7 @@ const audioCtx = new AudioContext();
 class Muse {
 	constructor(samples, { bpm, volume, type }) {
 		bpm = bpm ?? 110;
-		volume = volume ?? 100;
+		volume = volume ?? 100; // TODO
 		type = type ?? "sine";
 		const synthOptions = { type }
 		// const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -55,7 +55,7 @@ async function play(prog, that) {
 	console.log("ast:\n", ast);
 	console.log("remainder:\n", remainder);
 	
-	const result = compile(ast).map(x => x.value);
+	const result = compile(ast).map(x => [ x.value, x.duration ]);
 	console.log(result);
 
 	for (let i = 0; i < result.length; i++) {

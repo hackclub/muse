@@ -4,14 +4,17 @@ const lengthen = modifier => modifier.value.includes("-")
 
 const applyLengthen = (note, modifier) => ({ 
 	type: "beat", 
-	value: [note.value[0], note.value[1] * lengthen(modifier)]
+	value: note.value,
+	duration: note.duration * lengthen(modifier)
 })
 
 const repeat = (arr, num) => [].concat(... new Array(num).fill(arr));
 
 const applyModifier = (notes, modifier) => {
 	if (modifier.type === "length") {
-		return Array.isArray(notes) ? notes.map(x => applyLengthen(x, modifier)) : applyLengthen(notes, modifier);
+		return Array.isArray(notes) 
+			? notes.map(x => applyLengthen(x, modifier)) 
+			: applyLengthen(notes, modifier);
 	} else if (modifier.type === "repeat") {
 		return repeat(notes, modifier.number);
 	}
@@ -19,7 +22,7 @@ const applyModifier = (notes, modifier) => {
 
 const compileNode = node => {
 	if (Array.isArray(node)) return compile(node);
-	else if (node.type === "symbol" || node.type === ";") return { type: "beat", value: [ node.value, 1 ] }
+	else if (node.type === "symbol" || node.type === ";") return { type: "beat", value: node.value, duration: 1 }
 	else if (node.type === "modifier") return node.modifiers.reduce( (acc, cur) => {
 			return applyModifier(acc, cur);
 		}, compileNode(node.notes))
