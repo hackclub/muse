@@ -30,7 +30,7 @@ const starterSamples = [
 export function initialSamples() {
     return starterSamples.map(name => ({
         name,
-        url: `${window.location.href}samples/${name}.mp3`,
+        url: `https://leomcelroy/music-lang/samples/${name}.mp3`,
         provided: true,
     }))
 }
