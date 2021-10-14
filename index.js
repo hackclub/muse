@@ -50,6 +50,12 @@ const ACTIONS = {
 		const el = document.querySelector(".played-log");
    		el.scrollTop = el.scrollHeight - el.clientHeight;
 	},
+	CLEAR_PLAYED: (args, state) => {
+		state.played = [];
+		dispatch("RENDER");
+		const el = document.querySelector(".played-log");
+   		el.scrollTop = el.scrollHeight - el.clientHeight;
+	},
 	PLAY: (args, state) => {
 		play(state);
 	}

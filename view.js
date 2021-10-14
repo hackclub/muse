@@ -16,7 +16,7 @@ export const view = (state) => html`
 		</div>
 		<div class="left-editor">
 			<div>
-				<em>Played Notes</em>
+				<em>Played Notes</em> <button @click=${() => dispatch("CLEAR_PLAYED")}>clear</button>
 				<div class="played-log">${state.played.join(" ")}</div>
 			</div>
 			${drawSamples(state)}
