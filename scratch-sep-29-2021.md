@@ -1,3 +1,16 @@
+log pauses into console
+fix overload audio bug
+add other instrument waveforms
+make intro video
+make sharing site
+time how long section takes so you can play after
+adjust volume
+
+multiple tracks?
+
+
+
+
 bug
 
 ; x 4 fails

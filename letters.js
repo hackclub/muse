@@ -30,6 +30,7 @@ async function playNote(frequency, duration, ctx, ops = {}) {
   g.gain.setValueAtTime(0, ctx.currentTime);
   g.gain.linearRampToValueAtTime(.2, ctx.currentTime + duration/5/1000);
   g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + duration/1000)
+  g.gain.linearRampToValueAtTime(0, ctx.currentTime + duration*2/1000) // does this ramp from the last ramp
   // o.stop();
   // audioCtx.close();
 
