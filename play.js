@@ -1,4 +1,4 @@
-import { createMuse } from "./Muse.js";
+import { createMuse as createMuseTemp } from "./Muse.js";
 
 function playSample(name, context, state) {
 	const audio = document.querySelector(`#${name}-audio`);
@@ -7,12 +7,16 @@ function playSample(name, context, state) {
 	audio.play();
 }
 
-
-const makeIncluded = (state) => ({ createMuse: createMuse(state.samples.reduce((acc, cur) => {
+const createMuse = state => createMuseTemp(state.samples.reduce((acc, cur) => {
 	acc[cur.name] = (duration, ctx) => playSample(cur.name, ctx, state);
 	return acc;
-}, {})) })
+}, {}))
 
+const bindKeys = state => obj => {
+	state.keyBindings = obj;
+}
+
+const makeIncluded = (state) => ({ createMuse: createMuse(state), bindKeys: bindKeys(state) });
 
 export function play(state) {
 	const cm = document.querySelector("#cm");
@@ -23,5 +27,4 @@ export function play(state) {
 	const included = makeIncluded(state);
 	const f = new Function(...Object.keys(included), prog)
 	const result = new f(...Object.values(included));
-	state.keyBindings = result;
 }
