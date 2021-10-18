@@ -23,23 +23,10 @@ class Muse {
 		this.samples = { ...samples, ...getLetters(synthOptions) };
 
 		this.playing = false;
-
-		// this.current = null;
 	}
 
 	play(...progs) {
 		this.playing = true;
-		// (async () => {
-		// 	console.log(this.current);
-		// 	if (this.current !== null) {
-		// 		await this.current;
-		// 		this.current = null;
-		// 	}
-
-		// 	console.log(this.current);
-
-		// 	this.current = Promise.all([ progs.map(prog => play(prog, this)) ]);
-		// })()
 
 		progs.map(prog => play(prog, this));
 
