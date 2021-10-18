@@ -37,12 +37,11 @@ body {
 
 .button-container {
 	width: 100%;
-	display: grid;
+	display: flex;
 	place-content: center;
 }
 
-.trigger-play {
-	width: 100%;
+.button-container > button {
 	margin: 5px;
 }
 

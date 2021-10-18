@@ -1,3 +1,11 @@
+reflect notes
+slide
+glide
+offset
+repeat
+reverse
+
+
 log pauses into console
 fix overload audio bug
 add other instrument waveforms

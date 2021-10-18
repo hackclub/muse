@@ -14,10 +14,22 @@ export async function init(args, state) {
 
 	listenBody("keydown", "", (e) => {
 		let code = event.code;
+
+        const cm = document.querySelector("#cm");
+        const prog = cm.view.state.doc.toString();
+
+        window.localStorage.setItem("muse-prog", prog);
+
 		if (code === "Enter" && event.shiftKey) {
 		  event.preventDefault();
 		  dispatch("PLAY");
 		}
+
+        if (e.target.getAttribute("role") === "textbox") return;
+
+        if (code in state.keyBindings) {
+            state.keyBindings[code]();
+        }
 	})
 
 	const saved = window.localStorage.getItem("muse-prog")

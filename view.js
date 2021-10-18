@@ -1,18 +1,21 @@
 import { html } from "https://unpkg.com/lit-html@2.0.1/lit-html.js";
 import "https://leomcelroy.com/widgets/code-mirror.js"
 
+const activeMuses = muses => muses.map( (x, i) => html`<div>
+	<span>Muse ${i}</span>
+	<button @click=${e => dispatch("REMOVE_MUSE", { index : i })}>stop</button>
+</div>`)
+
 export const view = (state) => html`
 	<div class="editor">
 		<div>
 			<code-mirror id="cm"></code-mirror>
 			<div class="button-container">
 				<button class="trigger-play">play/attach</button>
+				<button @click=${() => dispatch("STOP")}>stop</button>
+				<button>share</button>
+				<button>examples</button>
 			</div>
-			${state.activeMuses.map( (x, i) => html`<div>
-					<span>Muse ${i}</span>
-					<button @click=${e => dispatch("REMOVE_MUSE", { index : i })}>stop</button>
-				</div>`)
-			}
 		</div>
 		<div class="left-editor">
 			<div>

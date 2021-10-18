@@ -22,10 +22,13 @@ class Muse {
 
 		this.samples = { ...samples, ...getLetters(synthOptions) };
 
+		this.playing = false;
+
 		// this.current = null;
 	}
 
 	play(...progs) {
+		this.playing = true;
 		// (async () => {
 		// 	console.log(this.current);
 		// 	if (this.current !== null) {
@@ -40,11 +43,12 @@ class Muse {
 
 		progs.map(prog => play(prog, this));
 
+
 		return this;
 	}
 
 	stop() {
-
+		this.playing = false;
 	}
 }
 
@@ -59,11 +63,14 @@ async function play(prog, that) {
 	console.log(result);
 
 	for (let i = 0; i < result.length; i++) {
-	  let [ symbol, beats] = result[i];
-	  dispatch("ADD_PLAYED", { symbol });
-	  if (symbol === ";") await sleep(60*1000/that.bpm*beats);
-	  else if (symbol in that.samples) that.samples[symbol](60*1000/that.bpm*beats, that.audioCtx);
+		if (that.playing === false) continue; 
+		let [ symbol, beats] = result[i];
+		dispatch("ADD_PLAYED", { symbol });
+		if (symbol === ";") await sleep(60*1000/that.bpm*beats);
+		else if (symbol in that.samples) that.samples[symbol](60*1000/that.bpm*beats, that.audioCtx);
 	}
+
+	that.playing = false;
 
 	return that;
 }
@@ -71,7 +78,7 @@ async function play(prog, that) {
 
 export const createMuse = samples => (ops = {}) => {
 	const newMuse = new Muse(samples, ops);
-	// dispatch("ADD_ACTIVE_MUSE", { newMuse })
+	dispatch("ADD_ACTIVE_MUSE", { newMuse })
 
 	return newMuse;
 }

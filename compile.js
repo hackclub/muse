@@ -10,15 +10,28 @@ const applyLengthen = (note, modifier) => ({
 
 const repeat = (arr, num) => [].concat(... new Array(num).fill(arr));
 
-const applyModifier = (notes, modifier) => {
-	if (modifier.type === "length") {
-		return Array.isArray(notes) 
+const modifiers = {
+	"length": (notes, modifier) => Array.isArray(notes) 
 			? notes.map(x => applyLengthen(x, modifier)) 
-			: applyLengthen(notes, modifier);
-	} else if (modifier.type === "repeat") {
-		return repeat(notes, modifier.number);
-	}
+			: applyLengthen(notes, modifier),
+	"repeat": (notes, modifier) => repeat(notes, modifier.number)
 }
+
+const applyModifier = (notes, modifier) => {
+	const type = modifier.type;
+	if (type in modifiers) return modifiers[type](notes, modifier);
+	else throw `Unrecongized modifier: ${modifier}`;
+}
+
+// const applyModifier = (notes, modifier) => {
+// 	if (modifier.type === "length") {
+// 		return Array.isArray(notes) 
+// 			? notes.map(x => applyLengthen(x, modifier)) 
+// 			: applyLengthen(notes, modifier);
+// 	} else if (modifier.type === "repeat") {
+// 		return repeat(notes, modifier.number);
+// 	}
+// }
 
 const compileNode = node => {
 	if (Array.isArray(node)) return compile(node);
