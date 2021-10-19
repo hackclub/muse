@@ -3,7 +3,7 @@ const oneOf = item => w => w.startsWith(item);
 const anyOf = arr => w => arr.some(oneOf(w));
 
 const skip = ["ws"];
-const literals = ["x", ";", "[", "]"];
+const literals = ["x", ";", "[", "]", "^"];
 
 const tokenRules = {
   number: /\d+/,
@@ -198,9 +198,11 @@ const tokenize = makeTokenizer(tokenRules, { skip, literals });
 //   ? { type: "length", note: x[0], length: x[1].value.length, plusOrMinus: x[1].value[0] }
 //   : x;
 
-const convertModifier = x => Array.isArray(x) 
-  ? { type: "repeat", number: Number(x[1].value) }
-  : x;
+const convertModifier = x => {
+  if (Array.isArray(x) && x[0].type === "^") return { type: "shift", number: Number(x[1].value) }
+  else if (Array.isArray(x) && x[0].type === "x") return { type: "repeat", number: Number(x[1].value) }
+  else return x;
+}
 
 const convertModifier0 = x => x[3] === null ? x[1] : ({ type: "modifier", notes: x[1], modifiers: x[3] })
 const convertModifier1 = x => x[1] === null ? x[0] : ({ type: "modifier", notes: [x[0]], modifiers: x[1] })
@@ -219,7 +221,8 @@ const note = s => or([
 
 const modifier = s => many(or([
   and(["x", "number"]),
-  "length"
+  "length",
+  and(["^", "number"])
 ], convertModifier))(s)
 
 const parse = many(p);

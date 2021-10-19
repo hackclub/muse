@@ -1,3 +1,55 @@
+// song goes here
+// createMuse({ bpm: 100, type: "sine" }).play(
+// `
+//   a4 ;- b4 ;- c5
+// `,
+// `
+//   c5 ;- d5 ;- e5
+// `
+// )
+
+// ^ shift octave
+
+// createMuse({ bpm: 100, type: "sine" }).play(
+// `
+//   a4 ;- b4 ;- c5 
+// `,
+// `
+//  [ a4 ;- b4 ;- c5 ] ^ 1
+// `
+// )
+
+createMuse({ bpm: 100, type: "sine" }).play("a4 c5 ; b4 d5 ; c5 e5")
+// a4 c5 ; b4 d5 ; c5 e5
+// a4 {^1} ; b4 {^1} ; c5 {^1}
+
+//below maps keys so you can compose
+key = 4
+type = "triangle" // sine | triangle | square | sawtooth
+
+a = () => createMuse({ type }).play(`a${key}`)
+s = () => createMuse({ type }).play(`b${key}`)
+d = () => createMuse({ type }).play(`c${key+1}`)
+f = () => createMuse({ type }).play(`d${key+1}`)
+g = () => createMuse({ type }).play(`e${key+1}`)
+h = () => createMuse({ type }).play(`f${key+1}`)
+j = () => createMuse({ type }).play(`g${key+1}`)
+k = () => createMuse({ type }).play(`a${key+1}`)
+l = () => createMuse({ type }).play(`b${key+1}`)
+
+// these returned s get bound
+bindKeys({ 
+  a, 
+  s, 
+  d, 
+  f, 
+  g, 
+  h, 
+  j, 
+  k, 
+  l 
+})
+
 reflect notes
 slide
 glide

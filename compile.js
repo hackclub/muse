@@ -8,13 +8,34 @@ const applyLengthen = (note, modifier) => ({
 	duration: note.duration * lengthen(modifier)
 })
 
+const shiftHelper = (note, num) => {
+
+	const [symbol] = note.split(/\d+/)
+	const number = note.slice(symbol.length);
+
+	if (!["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"].includes(symbol)) return note;
+
+
+	if (number === undefined) return `${symbol}${1*num}`;
+	else return `${symbol}${Number(number) + 1 * num}`
+}
+
+const shift = (note, modifier) => ({ 
+	type: "beat", 
+	value: shiftHelper(note.value, modifier.number),
+	duration: note.duration
+})
+
 const repeat = (arr, num) => [].concat(... new Array(num).fill(arr));
 
 const modifiers = {
 	"length": (notes, modifier) => Array.isArray(notes) 
 			? notes.map(x => applyLengthen(x, modifier)) 
 			: applyLengthen(notes, modifier),
-	"repeat": (notes, modifier) => repeat(notes, modifier.number)
+	"repeat": (notes, modifier) => repeat(notes, modifier.number),
+	"shift": (notes, modifier) => Array.isArray(notes) 
+			? notes.map(x => shift(x, modifier)) 
+			: shift(notes, modifier),
 }
 
 const applyModifier = (notes, modifier) => {

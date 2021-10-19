@@ -22,24 +22,29 @@ class Muse {
 
 		this.samples = { ...samples, ...getLetters(synthOptions) };
 
-		this.playing = false;
+		this.playing = [];
 	}
 
 	play(...progs) {
-		this.playing = true;
 
-		progs.map(prog => play(prog, this));
+
+		progs.map((prog, i) => {
+			this.playing[i] = true;
+			play(prog, i, this)
+		});
 
 
 		return this;
 	}
 
 	stop() {
-		this.playing = false;
+		this.playing.forEach((x, i) => {
+			this.playing[i] = false;
+		})
 	}
 }
 
-async function play(prog, that) {
+async function play(prog, index, that) {
 	const toks = tokenize(prog);
 	console.log("tokens:\n", toks)
 	const [ ast, remainder ] = parse(toks);
@@ -50,14 +55,14 @@ async function play(prog, that) {
 	console.log(result);
 
 	for (let i = 0; i < result.length; i++) {
-		if (that.playing === false) continue; 
+		if (that.playing[index] === false) continue; 
 		let [ symbol, beats] = result[i];
 		dispatch("ADD_PLAYED", { symbol });
 		if (symbol === ";") await sleep(60*1000/that.bpm*beats);
 		else if (symbol in that.samples) that.samples[symbol](60*1000/that.bpm*beats, that.audioCtx);
 	}
 
-	that.playing = false;
+	that.playing[index] = false;
 
 	return that;
 }

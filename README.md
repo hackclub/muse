@@ -39,7 +39,7 @@ each "+" or "-" correpsonds to a power of 2
 
 A pause is ";" which can also be lengthened or shortened
 
-so a arpeggio is 
+so an arpeggio is 
 
 ```
 a4 ; c5 ; e5
