@@ -1,53 +1,127 @@
-# A Music Language, maybe
+# Muse
+### a simple language for jamming!
 
-# Objectives
+[The Muse Editor](https://hackclub.github.io/muse/)
 
-- Make a social computing activity
-	- music naturally engages other people
-	- people can play together
-- Motivate computational/programmatic ideas from familiar concepts
-	- i.e. want to loop arises naturally when trying to make songs
-- Make sweet intro demo for club opener
+Muse is a simple language embedded in a JavaScript environment.
 
-# TODO
+To create a song create a muse and pass in your code.
 
-- [] add sample collection
-- [] add list of active muses which you can stop
-- [] set base tempo
-- [] add muse methods
-	- [] wait
-	- [] start
-	- [] stop
-- [] why does it stop working after too many calls
-- [] adding left recursion?
-- [] add loops
-- [] js interpolation
-- [] set envelope qualities
-- [x] pauses
-- [] tempo
-- [x] threads
-- [x] a better editor
-	- [] syntax highlighting
-- [] realtime controls/instruments
-- [] add h note for arbitrary hz value
+```
+createMuse().play("a4+ ;- [ c5 ; e5 ] x 4")
 
-# Thanks to
+```
 
-- Tevan
-- Lux for helping make the sound prettier by eliminating the ugly clicking noise
+The language has notes: a | a# | b | c | c# | d | d# | e | f | f# | g | g#  
+with an optional number 1 - 10 for pitch.
 
-# Notes
+```
+a4
+```
 
-- Instead of adding js interpolation to program, make interpreter for tagged template literal
-- should repeat with x work both ways, 3 x a4 == a4 x 3
-	- latter of the two could be slightly ambigious as to whether it's repeat 3 more times or repeat 3 times total
-- unpitched rythmic component
-	- drums have sharp decay and fast attack 
+You can lengthen notes with a "+" after:
 
-# Links
+```
+a4+
+a4++
+a4+++
+```
 
-- https://en.wikipedia.org/wiki/Envelope_(music)
+or shorten them with a "-" after:
+
+```
+a4-
+a4--
+a4---
+```
+
+each "+" or "-" correpsonds to a power of 2
+
+A pause is ";" which can also be lengthened or shortened
+
+so a arpeggio is 
+
+```
+a4 ; c5 ; e5
+```
+
+and a chord is
+
+```
+a4 c5 e5
+
+```
+
+A group is denoted with brackets "[ ]"
+
+```
+[ a4 c5 e5 ]++
+
+```
+
+To repeat something use "x" and some number
+
+```
+[ a4 c5 e5 ; ] x 4
+
+```
+
+createMuse also takes some optional arguments for beats per minute and wave type
+
+```
+createMuse({ bpm: 10, type: "sine" }) // type can be sine | sawtooth | triangle | square
+
+```
+
+You can also use samples that are listed on the right.
+
+```
+createMuse().play(`bubbles ; bubbles -`)
+
+```
+
+To play multiple tracks at once pass multiple strings into the play method.
+
+```
+createMuse().play(`a4 ; e4 ; d5 ;`, `; c5 ; e4 ; d5 ;`)
+
+```
+
+You can also bind functions to keys with the bindKey function. The key will correspond to the keydown event key and the value to the callback function.
+
+Here is an example keyboard with the bindKey function:
+
+```
+const key = 4
+const type = "triangle" // sine | triangle | square | sawtooth
+
+const a = () => createMuse({ type }).play(`a${key}`)
+const s = () => createMuse({ type }).play(`b${key}`)
+const d = () => createMuse({ type }).play(`c${key+1}`)
+const f = () => createMuse({ type }).play(`d${key+1}`)
+const g = () => createMuse({ type }).play(`e${key+1}`)
+const h = () => createMuse({ type }).play(`f#${key+1}`)
+const j = () => createMuse({ type }).play(`g${key+1}`)
+const k = () => createMuse({ type }).play(`a${key+1}`)
+const l = () => createMuse({ type }).play(`b${key+1}`)
+
+// these keys get bound
+bindKeys({ 
+  a, 
+  s, 
+  d, 
+  f, 
+  g, 
+  h, 
+  j, 
+  k, 
+  l 
+})
+
+```
+
+The console on the right of the editor just logs whatever was played.
 
 
-- link to instruments that hack clubbers made for noodling
+
 
