@@ -17,6 +17,18 @@ const STATE = {
 	rec: undefined,
 	played: [],
 	keyBindings: {},
+	showExamples: false,
+	examples: [],
+	showShared: false,
+}
+
+function copy(str) {
+	const inp = document.createElement('input');
+	document.body.appendChild(inp);
+	inp.value = str;
+	inp.select();
+	document.execCommand('copy', false);
+	inp.remove();
 }
 
 
@@ -61,6 +73,37 @@ const ACTIONS = {
 	STOP: (args, state) => {
 		state.activeMuses.forEach( muse => muse.stop() );
 		state.activeMuses = [];
+	},
+	EXAMPLES: ({ show }, state) => {
+		state.showExamples = show;
+		dispatch("RENDER");
+	},
+	LOAD: ({ txt }, state) => {
+		const cm = document.querySelector("#cm");
+		const prog = cm.view.state.doc.toString();
+
+		cm.view.dispatch({
+		  changes: { from: 0, to: prog.length, insert: txt }
+		});
+	},
+	SHARE: (args, state) => {
+		const cm = document.querySelector("#cm");
+		const prog = cm.view.state.doc.toString();
+		const url = 'https://airbridge.hackclub.com/v0.2/Saved%20Projects/Muse%20Projects/?authKey=recgJS1YFxdq7ypts1634664978nkjcc8fdj4';
+		(async () => {
+  			const res = await fetch(url, {
+			    method: "POST",
+			    headers: {'Content-Type': 'application/json'},
+			    body: JSON.stringify({
+			      "Content": prog
+			    })
+			  }).then(r => r.json())
+  			console.log(res);
+  			copy(res.fields["Link"]);
+		})()
+		
+		state.showShared = true;
+		dispatch("RENDER");
 	},
 	PLAY: (args, state) => {
 		play(state);
