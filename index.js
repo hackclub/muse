@@ -98,12 +98,12 @@ const ACTIONS = {
 			      "Content": prog
 			    })
 			  }).then(r => r.json())
-  			console.log(res);
+
   			copy(res.fields["Link"]);
+  			state.showShared = true;
+			dispatch("RENDER");
 		})()
 		
-		state.showShared = true;
-		dispatch("RENDER");
 	},
 	PLAY: (args, state) => {
 		play(state);
