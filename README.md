@@ -66,7 +66,7 @@ To repeat something use "x" and some number
 
 ```
 
-createMuse also takes some optional arguments for beats per minute and wave type
+createMuse also takes some optional arguments for beats per minute and wave type:
 
 ```
 createMuse({ bpm: 10, type: "sine" }) // type can be sine | sawtooth | triangle | square
@@ -121,6 +121,8 @@ bindKeys({
 ```
 
 The console on the right of the editor just logs whatever was played.
+
+If the playback is becoming choppy, just refresh the browser. Your current project won't be deleted. 
 
 
 
