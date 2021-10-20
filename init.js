@@ -104,7 +104,7 @@ export async function init(args, state) {
     
     (async () => {
         const examplesURL = `https://api2.hackclub.com/v0.1/Saved Projects/Muse Projects/?select={"filterByFormula": "{Public}=TRUE()"}`;
-        const json = await fetch(examplesURL).then(res => res.json());
+        const json = await fetch(examplesURL, { mode: "cors" }).then(res => res.json());
         state.examples = json.map(x => x.fields);
     })()
 }
