@@ -47,7 +47,6 @@ body {
 }
 
 .left-editor {
-	margin-top: 8px;
 	display: grid;
 	grid-template: 
 		"." 50%
@@ -57,8 +56,7 @@ body {
 
 .cm-wrap { 
 	/*min-height: max-content; */
-	margin-top: 8px;
-	height: 92%;
+	height: 93%;
 	border: 1px solid #ddd;
 }
 .cm-scroller { overflow: auto; }
