@@ -1,6 +1,8 @@
 // song goes here
-createMuse({ bpm: 110, type: "sin" }).play(
+createMuse({ bpm: 120, type: "sine" }).play(
 `
+
+
 
 
 `
@@ -11,25 +13,25 @@ createMuse({ bpm: 110, type: "sin" }).play(
 const key = 4
 const type = "triangle" // sine | triangle | square | sawtooth
 
-const KeyA = () => createMuse({ type }).play(`a${key}`)
-const KeyS = () => createMuse({ type }).play(`b${key}`)
-const KeyD = () => createMuse({ type }).play(`c${key+1}`)
-const KeyF = () => createMuse({ type }).play(`d${key+1}`)
-const KeyG = () => createMuse({ type }).play(`e${key+1}`)
-const KeyH = () => createMuse({ type }).play(`f#${key+1}`)
-const KeyJ = () => createMuse({ type }).play(`g${key+1}`)
-const KeyK = () => createMuse({ type }).play(`a${key+1}`)
-const KeyL = () => createMuse({ type }).play(`b${key+1}`)
+const a = () => createMuse({ type }).play(`a${key}`)
+const s = () => createMuse({ type }).play(`b${key}`)
+const d = () => createMuse({ type }).play(`c${key+1}`)
+const f = () => createMuse({ type }).play(`d${key+1}`)
+const g = () => createMuse({ type }).play(`e${key+1}`)
+const h = () => createMuse({ type }).play(`f#${key+1}`)
+const j = () => createMuse({ type }).play(`g${key+1}`)
+const k = () => createMuse({ type }).play(`a${key+1}`)
+const l = () => createMuse({ type }).play(`b${key+1}`)
 
-// these returned keys get bound
-return { 
-  KeyA, 
-  KeyS, 
-  KeyD, 
-  KeyF, 
-  KeyG, 
-  KeyH, 
-  KeyJ, 
-  KeyK, 
-  KeyL 
-}
+// these returned s get bound
+bindKeys({ 
+  a, 
+  s, 
+  d, 
+  f, 
+  g, 
+  h, 
+  j, 
+  k, 
+  l 
+})

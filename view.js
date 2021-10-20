@@ -6,6 +6,16 @@ const activeMuses = muses => muses.map( (x, i) => html`<div>
 	<button @click=${e => dispatch("REMOVE_MUSE", { index : i })}>stop</button>
 </div>`)
 
+const drawExamples = (state) => html`
+	<div class="examples">
+		${state.examples.map((x, i) => html`
+			<span class="example" @click=${() => dispatch("LOAD", { txt: x["Content"] })}>
+				${x["Name"]}
+			</span>
+		`)}
+	</div>
+`
+
 export const view = (state) => html`
 	<div class="editor">
 		<div>
@@ -13,8 +23,10 @@ export const view = (state) => html`
 			<div class="button-container">
 				<button class="trigger-play">play/attach</button>
 				<button @click=${() => dispatch("STOP")}>stop</button>
-				<button>share</button>
-				<button>examples</button>
+				<button @click=${() => dispatch("SHARE")}>share</button>
+				<button @click=${() => dispatch("EXAMPLES", { show: !state.showExamples })}>
+					examples
+				</button>
 			</div>
 		</div>
 		<div class="left-editor">
@@ -27,6 +39,8 @@ export const view = (state) => html`
 			</div>
 			${drawSamples(state)}
 		</div>
+		${ state.showExamples ? drawExamples(state) : "" }
+		${ state.showShared ? html`<div class="shared-confirmation">Sharing link copied to clipboard!</div>` : "" }
 	</div>
 `
 
