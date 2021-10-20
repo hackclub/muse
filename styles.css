@@ -1,6 +1,40 @@
+@font-face {
+  font-family: 'Phantom Sans';
+  src: url('https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Regular.woff')
+      format('woff'),
+    url('https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Regular.woff2')
+      format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Phantom Sans';
+  src: url('https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Italic.woff')
+      format('woff'),
+    url('https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Italic.woff2')
+      format('woff2');
+  font-weight: normal;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Phantom Sans';
+  src: url('https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Bold.woff')
+      format('woff'),
+    url('https://assets.hackclub.com/fonts/Phantom_Sans_0.7/Bold.woff2')
+      format('woff2');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
 body {
 	overflow: none;
 	margin: 0px;
+	font-family: 'Phantom Sans';
+	background: #121217;
+	color: white;
 }
 
 .editor {
@@ -20,10 +54,9 @@ body {
 		/ 100%;
 }
 
-
 .cm-wrap { 
 	/*min-height: max-content; */
-	height: 95%;
+	height: 93%;
 	border: 1px solid #ddd;
 }
 .cm-scroller { overflow: auto; }
@@ -36,28 +69,59 @@ body {
 }
 
 .button-container {
+	height: 7%;
 	width: 100%;
 	display: flex;
 	place-content: center;
+	align-items: center;
+	
 }
 
 .button-container > button {
 	margin: 5px;
+	background: #ec3750;
+	color: white;
+	border: none;
+	padding: 2px 12px;
+	border-radius: 8px;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+	height: 30px;
+	opacity: 0.7;
 }
 
+.button-container > button:hover {
+	opacity: 1;
+}
+
+.played-notes-heading-holder{
+	margin-bottom: 6px;
+	display: flex;
+	align-items: center;
+}
+
+.played-notes-heading{
+	flex-grow: 1;
+	font-weight: 800;
+}
+
+.left-editor{
+	padding: 4px 16px 12px 16px;
+}
 
 .played-log {
-	height: 95%;
+	height: 92%;
 	box-sizing: border-box;
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 5px;
-    overflow: scroll;
-    border: solid grey 2px;
+	padding: 10px;
+	border-radius: 5px;
+	overflow: scroll;
+	border: 1px solid rgb(51, 51, 51);
+	background: #252429;
 }
 
 .samples {
-	margin: 5px;
+	margin-top: 12px;
 	overflow: scroll;
 }
 
@@ -65,26 +129,41 @@ body {
 	cursor: pointer;
 }
 
+#sample-list{
+	display: flex;
+	flex-wrap: wrap;
+}
+
+
 #sample-list>li {
     list-style: none;
+		background: #252429;
+		margin-right: 0.5em;
+		margin-bottom: 0.5em;
+		padding: 0.2em 0.5em;
+		border-radius: 8px;
+		display: inline-flex;
+		align-items: center;
 }
 
 #sample-list>li>span {
     cursor: pointer;
+		
 }
 
 .playing {
     /* font-weight: bold; */
     font-style: italic;
 }
-.playing::after {
-    content: " (playing)";
+
+.delete:hover {
+		text-decoration: line-through;
 }
-.delete {
-    color: red;
-    cursor: pointer;
-    margin-left: 1em;
+
+.delete{
+	margin-left: 0.4em;
 }
+
 .deleted {
     visibility: hidden;
     display: none;
@@ -99,7 +178,6 @@ body {
 
 #recording-button {
     cursor: pointer;
-    font-weight: bold;
 }
 #recording-button.ready::before {
     content: '⏺️ Record new sample';
@@ -113,6 +191,46 @@ body {
     font-style: italic;
 }
 #recording-button.pre-permission::before {
-    content: 'No Permission';
+    content: 'No Recording Permission';
     font-style: italic;
+}
+
+
+.cm-content{
+	caret-color: white
+}
+
+.cm-selectionBackground {
+	background: #222
+}
+
+.cm-focused .cm-selectionBackground {
+	background: #233
+}
+
+.cm-cursor {
+	border-left-color: #444
+}
+
+.cm-specialChar{color: #f78}
+
+.cm-button {
+	background-image: linear-gradient(#393939, #111);
+	border: 1px solid #888;
+}
+
+.cm-button:active {
+		background-image: linear-gradient(#111, #333)
+}
+.cm-textfield {
+	border: "1px solid #555";
+	background-color: "inherit";
+}
+.cm-editor { filter: invert(1); color: black; margin-left: 8px; border-radius: 8px;}
+
+.ͼ1.cm-focused{outline: none}
+
+.cm-gutters{
+	border-top-left-radius: 8px;
+	border-bottom-left-radius: 8px;
 }

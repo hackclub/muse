@@ -9,7 +9,7 @@ const activeMuses = muses => muses.map( (x, i) => html`<div>
 export const view = (state) => html`
 	<div class="editor">
 		<div>
-			<code-mirror id="cm"></code-mirror>
+			<code-mirror id="cm" class="CodeMirror cm-s-3024-night"></code-mirror>
 			<div class="button-container">
 				<button class="trigger-play">play/attach</button>
 				<button @click=${() => dispatch("STOP")}>stop</button>
@@ -19,7 +19,10 @@ export const view = (state) => html`
 		</div>
 		<div class="left-editor">
 			<div>
-				<em>Played Notes</em> <button @click=${() => dispatch("CLEAR_PLAYED")}>clear</button>
+				<div class="played-notes-heading-holder">
+					<span class="played-notes-heading">Played Notes</span> 
+					<small @click=${() => dispatch("CLEAR_PLAYED")}>Clear Sounds</small>
+				</div>
 				<div class="played-log">${state.played.join(" ")}</div>
 			</div>
 			${drawSamples(state)}
@@ -29,8 +32,9 @@ export const view = (state) => html`
 
 const drawSamples = (state) => html`
 	<div class="samples">
-		<em>Samples</em>
-		<div id="recording-button" class="${state.recordingStatus}" @click=${(e) => {
+	<div class="played-notes-heading-holder">
+		<span class="played-notes-heading">Samples</span> 
+		<small id="recording-button" class="${state.recordingStatus}" @click=${(e) => {
 			switch(state.recordingStatus) {
 				case "ready":
 					dispatch("START_RECORDING")
@@ -42,8 +46,9 @@ const drawSamples = (state) => html`
 					// someone clicked while this is 'loading' or out of state
 					break;
 			}
-		}}></div>
-		<ul id="sample-list">
+		}}></small>
+	</div>
+		<div id="sample-list">
 		${state.samples.map( (sample, i) => html`
 			<li class="${sample.deleted ? 'deleted' : ''}">
 				<span class="sample-name" @click=${(e) => {
@@ -51,7 +56,14 @@ const drawSamples = (state) => html`
 					audio.volume = state.sampleVolume;
 					audio.currentTime = 0;
 					audio.play()
-				}}>${sample.name}</span>
+				}}></span>
+				<span class="delete" @click="${(e) => {
+					const shouldContinue = confirm("Are you sure you want to delete this sample?")
+					if (shouldContinue) {
+						document.querySelector(`#${sample.name}-audio`).pause()
+						dispatch("DELETE_SAMPLE", {index: i})
+					}
+				}}">${sample.name}</span>
 				<audio
 					id="${sample.name}-audio"
 					src="${sample.url}" 
@@ -62,16 +74,9 @@ const drawSamples = (state) => html`
 						e.target.parentElement.querySelector('.sample-name').classList.remove('playing')
 					}}
 				></audio>
-				<span class="delete" @click="${(e) => {
-					const shouldContinue = confirm("Are you sure you want to delete this sample?")
-					if (shouldContinue) {
-						document.querySelector(`#${sample.name}-audio`).pause()
-						dispatch("DELETE_SAMPLE", {index: i})
-					}
-				}}">x</span>
 			</li>
 		`)}
-		</ul>
+		</div>
 	</div>
 `
 
