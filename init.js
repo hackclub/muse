@@ -56,7 +56,7 @@ export async function init(args, state) {
             // fetch rec with that ID
             const url = `https://api2.hackclub.com/v0.1/Saved Projects/Muse Projects/?select={"filterByFormula": "RECORD_ID()='${file}'"}`;            
             (async () => {
-                  const json = await fetch(url).then(r => r.json())
+                  const json = await fetch(url, {mode: 'cors'}).then(r => r.json())
                   document.querySelector("#cm").view.dispatch({
                       changes: {from: 0, insert: json[0].fields["Content"] }
                     });
