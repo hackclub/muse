@@ -8,7 +8,7 @@ createMuse({ bpm: 110, type: "sine" }).play(
 )
 
 
-// below maps keys sounds
+// below maps keys so you can compose
 const key = 4
 const type = "triangle" // sine | triangle | square | sawtooth
 
@@ -22,7 +22,7 @@ const j = () => createMuse({ type }).play(\`g\${key+1}\`)
 const k = () => createMuse({ type }).play(\`a\${key+1}\`)
 const l = () => createMuse({ type }).play(\`b\${key+1}\`)
 
-// these keys get bound
+// these returned s get bound
 bindKeys({ 
   a, 
   s, 

@@ -32,55 +32,13 @@ export async function init(args, state) {
         }
 	})
 
-    listenBody("mousedown", "", (e) => {
-        if (!e.target.matches(".examples > *, .examples")) {
-            dispatch("EXAMPLES", { show: false });
-        }
-
-        if (!e.target.matches(".shared-confirmation")) {
-            state.showShared = false;
-            dispatch("RENDER");
-        }
-    })
+	const saved = window.localStorage.getItem("muse-prog")
+	document.querySelector("#cm").view.dispatch({
+	  changes: { from: 0, insert: !saved ? defaultProg.trim() : saved }
+	});
 
 	const savedSamples = window.localStorage.getItem("muse-samples");
 	if (savedSamples) state.samples = JSON.parse(savedSamples);
-
-    // load program
-    const url = new URL(window.location.href);
-    const search = window.location.search;
-    const file = new URLSearchParams(search).get("file");
-    if (file) {
-        let file_url = file;
-        if (file.startsWith("rec")) { // fetch from airtable
-            // fetch rec with that ID
-            const url = `https://api2.hackclub.com/v0.1/Saved Projects/Muse Projects/?select={"filterByFormula": "RECORD_ID()='${file}'"}`;            
-            (async () => {
-                  const json = await fetch(url, {mode: 'cors'}).then(r => r.json())
-                  document.querySelector("#cm").view.dispatch({
-                      changes: {from: 0, insert: json[0].fields["Content"] }
-                    });
-            })()
-
-        } else { // fetch from another page
-            if (!file.startsWith("http")) file_url = `examples/${file}`;
-
-            (async () => {
-                const file = await fetch(file_url,  {mode: 'cors'});
-                const txt = await file.text();
-
-                document.querySelector("#cm").view.dispatch({
-                  changes: {from: 0, insert: txt}
-                });
-            })()
-        }
-        
-    } else { // if no parameter and empty load cached program else load default program
-        const saved = window.localStorage.getItem("muse-prog")
-        document.querySelector("#cm").view.dispatch({
-          changes: { from: 0, insert: !saved ? defaultProg.trim() : saved }
-        });
-    }
 
 
 	dispatch("RENDER")
@@ -100,13 +58,6 @@ export async function init(args, state) {
             sendData(blob)
         }
     }
-
-    
-    (async () => {
-        const examplesURL = `https://api2.hackclub.com/v0.1/Saved Projects/Muse Projects/?select={"filterByFormula": "{Public}=TRUE()"}`;
-        const json = await fetch(examplesURL, { mode: "cors" }).then(res => res.json());
-        state.examples = json.map(x => x.fields);
-    })()
 }
 
 function makeId(length) {

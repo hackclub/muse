@@ -1,0 +1,101 @@
+[
+  c5 ; c5++ ; a4- ;- a4+ ;
+  c5 ; c5++ ; g4- ;- g4+ ;
+  a4 ; a#4 ; c5 ; d5 ; e5 ; c5
+] -
+
+
+
+[
+  f#5; f#5; g5; ;
+  g5;- g5; f#5; f#5;
+  g5;- f#5; e5; e5;
+] -
+
+
+ufo ; wipe ;- ufo ;-- ufo ;-- ufo ;- ufo ;- wipe ;
+
+
+createMuse({ bpm: 110, type: "sin" }).play(
+`
+[ c4 e4 g4 ; g4 c4 e4 ; g4 c4 e4 ; b3 d4 f#4 ; d4 a4 f#4 ; f#4 a4 d4 ; ] x 10
+`,
+`
+[ a4 ;- c5 ;- a5 ;- g5 ;- f#5 ;- e5 ;- c5 ;- d5 ;- e5 ;- f#5 ;- d5 ;- e5 ;- ] x 10
+
+`
+)
+
+// workshop  notes
+// https://demo.firepad.io/#fGjaVEGxpE
+
+https://leomcelroy.com/music-lang/
+https://leomcelroy.com/music-lang/
+[
+    c5 ; c5++ ; a4- ;- a4+ ;
+    c5 ; c5++ ; g4- ;- g4+ ;
+    a4 ; a#4 ; c5 ; d5 ; e5 ; c5
+] -
+
+ufo ; wipe ;- ufo ;-- ufo ;-- ufo ;- ufo ;- wipe ;
+
+
+Mario Underground theme 
+[c4 g4 ; c4 g4; c4 e4; c4 e4 ; d4 f4 ; d4 f4 ;++]--x111
+
+// song goes here
+// createMuse({ bpm: 110, type: "triangle" }).play(
+// `
+// [c4 g4 ; c4 g4; c4 e4; c4 e4 ; d4 f4 ; d4 f4 ;+]--x111
+// `
+// )
+
+
+// below maps keys so you can compose
+const key = 4
+const type = "triangle" // sine | triangle | square | sawtooth
+
+const KeyA = () => createMuse({ type }).play(`a${key}`)
+const KeyS = () => createMuse({ type }).play(`b${key}`)
+const KeyD = () => createMuse({ type }).play(`c${key+1}`)
+const KeyF = () => createMuse({ type }).play(`d${key+1}`)
+const KeyG = () => createMuse({ type }).play(`e${key+1}`)
+const KeyH = () => createMuse({ type }).play(`f#${key+1}`)
+const KeyJ = () => createMuse({ type }).play(`g${key+1}`)
+const KeyK = () => createMuse({ type }).play(`a${key+1}`)
+const KeyL = () => createMuse({ type }).play(`b${key+1}`)
+
+// these returned keys get bound
+return { 
+  KeyA, 
+  KeyS, 
+  KeyD, 
+  KeyF, 
+  KeyG, 
+  KeyH, 
+  KeyJ, 
+  KeyK, 
+  KeyL 
+}
+
+[ strike ;- strike ; strike ; splits ; splits ;- ] x 50
+
+
+const KeyA = () => createMuse({ type }).play(`clay`)
+const KeyS = () => createMuse({ type }).play(`bubbles`)
+const KeyD = () => createMuse({ type }).play(`flash1`)
+const KeyF = () => createMuse({ type }).play(`moon`)
+const KeyG = () => createMuse({ type }).play(`pinwheel`)
+const KeyH = () => createMuse({ type }).play(`splits`)
+const KeyJ = () => createMuse({ type }).play(`strike`)
+const KeyK = () => createMuse({ type }).play(`wipe`)
+const KeyL = () => createMuse({ type }).play(`ufo`)
+
+
+https://workshops.hackclub.com/tunes/
+
+
+
+
+
+
