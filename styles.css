@@ -56,6 +56,49 @@ body {
     border: solid grey 2px;
 }
 
+.examples { 
+	display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 80%;
+    background: lightgrey;
+    border: 2px solid black;
+    padding: 15px;
+    border-radius: 10px;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: start;
+    align-content: flex-start;
+}
+
+.example {
+	border: 1px solid black;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 5px;
+    margin: 5px;
+    background: azure;
+}
+
+.example:hover {
+	opacity: .8;
+}
+
+.shared-confirmation {
+	position: fixed;
+	left: 50%;
+	top: 30%;
+	transform: translate(-50%, -50%);
+	padding: 5px;
+	background: lightblue;
+	border-radius: 5px;
+	text-align: center;
+	border:  2px solid black;
+}
+
 .samples {
 	margin: 5px;
 	overflow: scroll;
