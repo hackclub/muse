@@ -8,21 +8,33 @@ const applyLengthen = (note, modifier) => ({
 	duration: note.duration * lengthen(modifier)
 })
 
+const twelveNotes = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"];
+
 const shiftHelper = (note, num) => {
 
 	const [symbol] = note.split(/\d+/)
 	const number = note.slice(symbol.length);
 
-	if (!["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"].includes(symbol)) return note;
+	if (!twelveNotes.includes(symbol)) return note;
 
+	const currentIndex = twelveNotes.indexOf(symbol);
+	let newIndex = (currentIndex + 1*num);
+	let symbolIndex = newIndex % twelveNotes.length;
+	if (symbolIndex < 0) symbolIndex = twelveNotes.length - Math.abs(symbolIndex);
 
-	if (number === undefined) return `${symbol}${1*num}`;
-	else return `${symbol}${Number(number) + 1 * num}`
+	const newSymbol = twelveNotes[symbolIndex];
+
+	let pitch = Math.floor(newIndex / twelveNotes.length);
+	pitch = Number(number) + pitch;
+	pitch = Math.min(Math.max(pitch, 0), 10);
+
+	if (number === undefined) return `${newSymbol}${pitch}`;
+	else return `${newSymbol}${pitch}`
 }
 
-const shift = (note, modifier) => ({ 
+const shift = (note, modifier, up = true) => ({ 
 	type: "beat", 
-	value: shiftHelper(note.value, modifier.number),
+	value: shiftHelper(note.value, up ? modifier.number : -modifier.number),
 	duration: note.duration
 })
 
@@ -33,9 +45,12 @@ const modifiers = {
 			? notes.map(x => applyLengthen(x, modifier)) 
 			: applyLengthen(notes, modifier),
 	"repeat": (notes, modifier) => repeat(notes, modifier.number),
-	"shift": (notes, modifier) => Array.isArray(notes) 
+	"up-shift": (notes, modifier) => Array.isArray(notes) 
 			? notes.map(x => shift(x, modifier)) 
 			: shift(notes, modifier),
+	"down-shift": (notes, modifier) => Array.isArray(notes) 
+			? notes.map(x => shift(x, modifier, false)) 
+			: shift(notes, modifier, false),
 }
 
 const applyModifier = (notes, modifier) => {
