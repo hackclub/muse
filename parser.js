@@ -3,7 +3,7 @@ const oneOf = item => w => w.startsWith(item);
 const anyOf = arr => w => arr.some(oneOf(w));
 
 const skip = ["ws"];
-const literals = ["x", ";", "[", "]", "^", "_"];
+const literals = ["x", ";", "[", "]", "^", "_", "<"];
 
 const tokenRules = {
   number: /\d+/,
@@ -223,6 +223,7 @@ const note = s => or([
 const modifier = s => many(or([
   and(["x", "number"]),
   "length",
+  "<",
   and(["^", "number"]),
   and(["_", "number"])
 ], convertModifier))(s)

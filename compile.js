@@ -51,6 +51,9 @@ const modifiers = {
 	"down-shift": (notes, modifier) => Array.isArray(notes) 
 			? notes.map(x => shift(x, modifier, false)) 
 			: shift(notes, modifier, false),
+	"<": (notes, modifier) => Array.isArray(notes) 
+			? notes.reverse() 
+			: notes,
 }
 
 const applyModifier = (notes, modifier) => {
