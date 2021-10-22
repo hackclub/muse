@@ -9,27 +9,33 @@ const applyLengthen = (note, modifier) => ({
 })
 
 const twelveNotes = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"];
+const bindPitch = n => Math.min(Math.max(n, 0), 10);
 
 const shiftHelper = (note, num) => {
 
 	const [symbol] = note.split(/\d+/)
-	const number = note.slice(symbol.length);
+	const number = Number(note.slice(symbol.length));
 
 	if (!twelveNotes.includes(symbol)) return note;
 
-	const currentIndex = twelveNotes.indexOf(symbol);
-	let newIndex = (currentIndex + 1*num);
-	let symbolIndex = newIndex % twelveNotes.length;
-	if (symbolIndex < 0) symbolIndex = twelveNotes.length - Math.abs(symbolIndex);
+	let finalNote = symbol;
+	let steps = 0;
 
-	const newSymbol = twelveNotes[symbolIndex];
+	if (num === 0) return `${finalNote}${number}`;
+	else if (num > 0) {
+		for (let i = 1; i < num + 1; i++) {
+			finalNote = twelveNotes[i % 12];
+			if (finalNote === "c") steps++;
+		}
+	} else {
+		for (let i = 1; i > num - 1; i--) {
+			finalNote = twelveNotes[(i % 12 + 12) % 12];
+			// finalNote = twelveNotes[(12 - Math.abs(i % twelveNotes.length)) % 12];
+			if (finalNote === "b") steps--;
+		}
+	}
 
-	let pitch = Math.floor(newIndex / twelveNotes.length);
-	pitch = Number(number) + pitch;
-	pitch = Math.min(Math.max(pitch, 0), 10);
-
-	if (number === undefined) return `${newSymbol}${pitch}`;
-	else return `${newSymbol}${pitch}`
+	return `${finalNote}${number + steps}`
 }
 
 const shift = (note, modifier, up = true) => ({ 
