@@ -29,6 +29,10 @@
   font-display: swap;
 }
 
+:root {
+  --color: #8686868c;
+}
+
 body {
 	overflow: none;
 	margin: 0px;
@@ -62,6 +66,7 @@ body {
 	border: 1px solid #ddd;
 }
 .cm-scroller { overflow: auto; }
+
 .ͼd {
 	color: #973e1b;
 }
@@ -79,7 +84,7 @@ body {
 	
 }
 
-.button-container > button {
+.button-container > button, .hc-button {
 	margin: 5px;
 	background: #ec3750;
 	color: white;
@@ -90,11 +95,16 @@ body {
 	cursor: pointer;
 	outline: inherit;
 	height: 30px;
+	opacity: 1;
+}
+
+.button-container > button:hover, .hc-button:hover {
 	opacity: 0.7;
 }
 
-.button-container > button:hover {
-	opacity: 1;
+.hc-button {
+	padding: 2px 8px;
+	height: 25px;
 }
 
 .played-notes-heading-holder{
@@ -225,18 +235,17 @@ body {
 
 #sample-list>li {
     list-style: none;
-		background: #252429;
-		margin-right: 0.5em;
-		margin-bottom: 0.5em;
-		padding: 0.2em 0.5em;
-		border-radius: 8px;
-		display: inline-flex;
-		align-items: center;
+	background: #252429;
+	margin-right: 0.5em;
+	margin-bottom: 0.5em;
+	padding: 0.2em 0.5em;
+	border-radius: 8px;
+	display: inline-flex;
+	align-items: center;
 }
 
 #sample-list>li>span {
     cursor: pointer;
-		
 }
 
 .playing {
@@ -244,22 +253,25 @@ body {
     font-style: italic;
 }
 
-.delete:hover {
-		text-decoration: line-through;
+.delete {
+	margin-left: 0.4em;
+	color: #ec3750;
 }
 
-.delete{
-	margin-left: 0.4em;
+.delete:hover {
+	opacity: .5;
 }
 
 .deleted {
-    visibility: hidden;
-    display: none;
+	visibility: hidden;
+	display: none;
 }
+
 .playing.sample-name::before {
     font-style: normal;
     content: '⏸️ ';
 }
+
 .sample-name::before {
     content: '▶️ ';
 }
@@ -267,6 +279,7 @@ body {
 #recording-button {
     cursor: pointer;
 }
+
 #recording-button.ready::before {
     content: '⏺️ Record new sample';
 }
@@ -274,10 +287,12 @@ body {
 #recording-button.recording::before {
     content: '⏹ End recording';
 }
+
 #recording-button.loading::before {
     content: '⌛ Loading...';
     font-style: italic;
 }
+
 #recording-button.pre-permission::before {
     content: 'No Recording Permission';
     font-style: italic;
@@ -314,9 +329,16 @@ body {
 	border: "1px solid #555";
 	background-color: "inherit";
 }
-.cm-editor { filter: invert(1); color: black; margin-left: 8px; border-radius: 8px;}
+.cm-editor { 
+	filter: invert(1); 
+	color: black; 
+	margin-left: 8px; 
+	border-radius: 8px;
+}
 
-.ͼ1.cm-focused{outline: none}
+.ͼ1.cm-focused {
+	outline: none
+}
 
 .cm-gutters{
 	border-top-left-radius: 8px;

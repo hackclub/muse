@@ -33,7 +33,7 @@ export const view = (state) => html`
 			<div>
 				<div class="played-notes-heading-holder">
 					<span class="played-notes-heading">Played Notes</span> 
-					<small @click=${() => dispatch("CLEAR_PLAYED")}>Clear Sounds</small>
+					<button class="hc-button" @click=${() => dispatch("CLEAR_PLAYED")}>Clear Sounds</button>
 				</div>
 				<div class="played-log">${state.played.join(" ")}</div>
 			</div>
@@ -70,14 +70,14 @@ const drawSamples = (state) => html`
 					audio.volume = state.sampleVolume;
 					audio.currentTime = 0;
 					audio.play()
-				}}></span>
+				}}>${sample.name}</span>
 				<span class="delete" @click="${(e) => {
 					const shouldContinue = confirm("Are you sure you want to delete this sample?")
 					if (shouldContinue) {
 						document.querySelector(`#${sample.name}-audio`).pause()
 						dispatch("DELETE_SAMPLE", {index: i})
 					}
-				}}">${sample.name}</span>
+				}}">x</span>
 				<audio
 					id="${sample.name}-audio"
 					src="${sample.url}" 
