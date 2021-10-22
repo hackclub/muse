@@ -20,16 +20,17 @@ const shiftHelper = (note, num) => {
 
 	let finalNote = symbol;
 	let steps = 0;
+	let currentIndex = twelveNotes.indexOf(symbol);
 
 	if (num === 0) return `${finalNote}${number}`;
 	else if (num > 0) {
 		for (let i = 1; i < num + 1; i++) {
-			finalNote = twelveNotes[i % 12];
+			finalNote = twelveNotes[(i + currentIndex)  % 12];
 			if (finalNote === "c") steps++;
 		}
 	} else {
-		for (let i = 1; i > num - 1; i--) {
-			finalNote = twelveNotes[(i % 12 + 12) % 12];
+		for (let i = -1; i > num - 1 ; i--) {
+			finalNote = twelveNotes[((i + currentIndex) % 12 + 12) % 12];
 			if (finalNote === "b") steps--;
 		}
 	}
