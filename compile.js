@@ -30,7 +30,6 @@ const shiftHelper = (note, num) => {
 	} else {
 		for (let i = 1; i > num - 1; i--) {
 			finalNote = twelveNotes[(i % 12 + 12) % 12];
-			// finalNote = twelveNotes[(12 - Math.abs(i % twelveNotes.length)) % 12];
 			if (finalNote === "b") steps--;
 		}
 	}
