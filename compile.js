@@ -8,21 +8,39 @@ const applyLengthen = (note, modifier) => ({
 	duration: note.duration * lengthen(modifier)
 })
 
+const twelveNotes = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"];
+const bindPitch = n => Math.min(Math.max(n, 0), 10);
+
 const shiftHelper = (note, num) => {
 
 	const [symbol] = note.split(/\d+/)
-	const number = note.slice(symbol.length);
+	const number = Number(note.slice(symbol.length));
 
-	if (!["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"].includes(symbol)) return note;
+	if (!twelveNotes.includes(symbol)) return note;
 
+	let finalNote = symbol;
+	let steps = 0;
+	let currentIndex = twelveNotes.indexOf(symbol);
 
-	if (number === undefined) return `${symbol}${1*num}`;
-	else return `${symbol}${Number(number) + 1 * num}`
+	if (num === 0) return `${finalNote}${number}`;
+	else if (num > 0) {
+		for (let i = 1; i < num + 1; i++) {
+			finalNote = twelveNotes[(i + currentIndex)  % 12];
+			if (finalNote === "c") steps++;
+		}
+	} else {
+		for (let i = -1; i > num - 1 ; i--) {
+			finalNote = twelveNotes[((i + currentIndex) % 12 + 12) % 12];
+			if (finalNote === "b") steps--;
+		}
+	}
+
+	return `${finalNote}${number + steps}`
 }
 
-const shift = (note, modifier) => ({ 
+const shift = (note, modifier, up = true) => ({ 
 	type: "beat", 
-	value: shiftHelper(note.value, modifier.number),
+	value: shiftHelper(note.value, up ? modifier.number : -modifier.number),
 	duration: note.duration
 })
 
@@ -33,9 +51,15 @@ const modifiers = {
 			? notes.map(x => applyLengthen(x, modifier)) 
 			: applyLengthen(notes, modifier),
 	"repeat": (notes, modifier) => repeat(notes, modifier.number),
-	"shift": (notes, modifier) => Array.isArray(notes) 
+	"up-shift": (notes, modifier) => Array.isArray(notes) 
 			? notes.map(x => shift(x, modifier)) 
 			: shift(notes, modifier),
+	"down-shift": (notes, modifier) => Array.isArray(notes) 
+			? notes.map(x => shift(x, modifier, false)) 
+			: shift(notes, modifier, false),
+	"<": (notes, modifier) => Array.isArray(notes) 
+			? notes.reverse() 
+			: notes,
 }
 
 const applyModifier = (notes, modifier) => {

@@ -1,7 +1,7 @@
 import { compile } from "./compile.js";
 import { parse, tokenize } from "./parser.js";
 
-const toks = tokenize("d ^ 3");
+const toks = tokenize("[a4 e4]<");
 console.log("tokens:\n", toks)
 const [ ast, remainder ] = parse(toks);
 console.log("ast:\n", ast);
