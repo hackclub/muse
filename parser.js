@@ -11,7 +11,8 @@ const tokenRules = {
   ws: /\s+/,
   literal: anyOf(literals),
   symbol: /[a-zA-Z][a-zA-Z\d\#]*/,
-  reference: /\$[\d]+/
+  referenceFunc: /\$f[\d]+/,
+  referenceArr: /\$a[\d]+/
 }
 
 const regExFunc = regex => string => { // not used
@@ -195,10 +196,6 @@ class Stream { // not used
 
 const tokenize = makeTokenizer(tokenRules, { skip, literals });
 
-// const convertLength = x => Array.isArray(x)
-//   ? { type: "length", note: x[0], length: x[1].value.length, plusOrMinus: x[1].value[0] }
-//   : x;
-
 const convertModifier = x => {
   if (Array.isArray(x) && x[0].type === "^") return { type: "up-shift", number: Number(x[1].value) }
   else if (Array.isArray(x) && x[0].type === "_") return { type: "down-shift", number: Number(x[1].value) }
@@ -211,14 +208,13 @@ const convertModifier1 = x => x[1] === null ? x[0] : ({ type: "modifier", notes:
 
 const p = s => or([
   and([ "[", many(p), "]", opt(modifier)], convertModifier0),
-  // and([ "[", many(p), "]" ], x => x[1]),
   and([ note, opt(modifier) ], convertModifier1),
-  // note,
 ])(s);
 
 const note = s => or([
   "symbol",
-  ";"
+  ";",
+  "referenceArr"
 ])(s);
 
 const modifier = s => many(or([
@@ -227,7 +223,7 @@ const modifier = s => many(or([
   "<",
   and(["^", "number"]),
   and(["_", "number"]),
-  "reference"
+  "referenceFunc"
 ], convertModifier))(s)
 
 const parse = many(p);

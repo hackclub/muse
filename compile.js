@@ -2,11 +2,7 @@ const lengthen = modifier => modifier.value.includes("-")
 	? 1/2**(modifier.value.length)
 	: 2**modifier.value.length;
 
-const applyLengthen = (note, modifier) => ({ 
-	type: "beat", 
-	value: note[0],
-	duration: npte[1] * lengthen(modifier)
-})
+const applyLengthen = (note, modifier) => [ note[0], note[1] * lengthen(modifier) ];
 
 const twelveNotes = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"];
 const bindPitch = n => Math.min(Math.max(n, 0), 10);
@@ -40,11 +36,10 @@ const shiftHelper = (note, num) => {
 	return `${finalNote}${pitch}`
 }
 
-const shift = (note, modifier, up = true) => ({ 
-	type: "beat", 
-	value: shiftHelper(note[0], up ? modifier.number : -modifier.number),
-	duration: note[1]
-})
+const shift = (note, modifier, up = true) => [
+	shiftHelper(note[0], up ? modifier.number : -modifier.number),
+	note[1]
+]
 
 const repeat = (arr, num) => [].concat(... new Array(num).fill(arr));
 
@@ -72,42 +67,19 @@ const modifiers = {
 }
 
 
-
 const applyModifier = (notes, modifier, refs) => {
 	const type = modifier.type;
 	if (type in modifiers) return modifiers[type](notes, modifier);
-	else if (type === "reference") {
+	else if (type === "referenceFunc") {
 		const ref = refs[modifier.value];
-		const refType = 
-			Array.isArray(ref) ? "array" 
-			: typeof ref === "function" ? "function"
-			: "unexpected";
-
-		const switchOps = {
-			"function": ref => ref(Array.isArray(notes) ? notes : [notes]),
-			"array": ref => Array.isArray(notes) ? [...notes, ...ref] : [notes, ...ref]
-		}
-		if (!(refType in switchOps)) throw "Unexpected interpolated value."
-		return switchOps[refType](ref);
-
+		return ref(Array.isArray(notes) ? notes : [notes]);
 	} else throw `Unrecongized modifier: ${modifier}`;
 }
 
-// const applyModifier = (notes, modifier) => {
-// 	if (modifier.type === "length") {
-// 		return Array.isArray(notes) 
-// 			? notes.map(x => applyLengthen(x, modifier)) 
-// 			: applyLengthen(notes, modifier);
-// 	} else if (modifier.type === "repeat") {
-// 		return repeat(notes, modifier.number);
-// 	}
-// }
-
 const compileNode = (node, refs) => {
-	// if (isBeat(node)) return { type: "beat", value: node[0], duration: node[1] };
 	if (!isBeat(node) && Array.isArray(node)) return compile(node, refs);
-	// else if (node.type === "symbol" || node.type === ";") return { type: "beat", value: node.value, duration: 1 }
-	else if (node.type === "symbol" || node.type === ";") return [ node.value, 1 ]
+	else if (node.type === "symbol" || node.type === ";") return [ node.value, 1 ];
+	else if (node.type === "referenceArr") return refs[node.value];
 	else if (node.type === "modifier") return node.modifiers.reduce( (acc, cur, i) => {
 			return applyModifier(acc, cur, refs);
 		}, compileNode(node.notes, refs))

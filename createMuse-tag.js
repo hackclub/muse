@@ -7,16 +7,6 @@ const sleep = m => new Promise(r => setTimeout(r, m));
 const AudioContext = window.AudioContext || window.webkitAudioContext;
 const audioCtx = new AudioContext();
 
-
-// const test = (str, ...vals) => {
-// return str.reduce( 
-//   (acc, cur, i) => 
-//     i < vals.length 
-//       ? acc + cur + vals[i] 
-//       : acc + cur, 
-//   "")
-// }
-
 export const museTag = (strs, ...vals) => { // should be able to insert array of beats
 	let result = "";
 	let refs = {}; // if val is function store in here
@@ -24,8 +14,12 @@ export const museTag = (strs, ...vals) => { // should be able to insert array of
 		if (i >= vals.length) result = result + str;
 		else {
 			const val = vals[i];
-			if (typeof val === "function" || Array.isArray(val)) {
-				let tempName = `$${i}`;
+			if (typeof val === "function") {
+				let tempName = `$f${i}`;
+				refs[tempName] = val;
+				result = result + str + tempName; 
+			} else if (Array.isArray(val)) {
+				let tempName = `$a${i}`;
 				refs[tempName] = val;
 				result = result + str + tempName; 
 			} else {
@@ -34,14 +28,16 @@ export const museTag = (strs, ...vals) => { // should be able to insert array of
 		} 
 	})
 
+	console.log(result);
+
 	const toks = tokenize(result);
+	console.log(toks);
 
 	const [ ast, remainder ] = parse(toks);
-	console.log(toks)
+	console.log(ast);
 	const compiled = compile(ast, refs);
-	
+	console.log(compiled);
 	return compiled;
-	// return compiled.map(x => [ x.value, x.duration ]);
 }
 
 export const createMuseTag = samples => (ops = {}) => {	

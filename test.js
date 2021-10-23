@@ -2,7 +2,7 @@ import { compile } from "./compile.js";
 import { parse, tokenize } from "./parser.js";
 import { museTag } from "./createMuse-tag.js";
 
-const interpolated = museTag`[a4; a5; a6;] ^ 1`
+const interpolated = museTag`${["a1", 2]} ^ 1`
 console.log("interpolated", interpolated);
 
 const toks = tokenize("[a4 e4]<");
