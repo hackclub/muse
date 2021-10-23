@@ -22,7 +22,7 @@ class Muse {
 
 		this.samples = { ...samples, ...getLetters(synthOptions) };
 
-		this.playing = [];
+		this.playing = []; // this is array to support multiple muse program args
 	}
 
 	play(...progs) {
