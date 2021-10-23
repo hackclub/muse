@@ -4,8 +4,8 @@ const lengthen = modifier => modifier.value.includes("-")
 
 const applyLengthen = (note, modifier) => ({ 
 	type: "beat", 
-	value: note[0],
-	duration: npte[1] * lengthen(modifier)
+	value: note.value,
+	duration: note.duration * lengthen(modifier)
 })
 
 const twelveNotes = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"];
@@ -35,62 +35,37 @@ const shiftHelper = (note, num) => {
 		}
 	}
 
-	const pitch = bindPitch(number + steps);
-
-	return `${finalNote}${pitch}`
+	return `${finalNote}${number + steps}`
 }
 
 const shift = (note, modifier, up = true) => ({ 
 	type: "beat", 
-	value: shiftHelper(note[0], up ? modifier.number : -modifier.number),
-	duration: note[1]
+	value: shiftHelper(note.value, up ? modifier.number : -modifier.number),
+	duration: note.duration
 })
 
 const repeat = (arr, num) => [].concat(... new Array(num).fill(arr));
 
-const isBeat = (node) => {
-	if (!Array.isArray(node)) return false;
-
-	const [ symbol, duration ] = node;
-	return typeof symbol === "string" && typeof duration === "number";
-}
-
 const modifiers = {
-	"length": (notes, modifier) => !isBeat(notes) && Array.isArray(notes) 
+	"length": (notes, modifier) => Array.isArray(notes) 
 			? notes.map(x => applyLengthen(x, modifier)) 
 			: applyLengthen(notes, modifier),
 	"repeat": (notes, modifier) => repeat(notes, modifier.number),
-	"up-shift": (notes, modifier) => !isBeat(notes) && Array.isArray(notes) 
+	"up-shift": (notes, modifier) => Array.isArray(notes) 
 			? notes.map(x => shift(x, modifier)) 
 			: shift(notes, modifier),
-	"down-shift": (notes, modifier) => !isBeat(notes) && Array.isArray(notes) 
+	"down-shift": (notes, modifier) => Array.isArray(notes) 
 			? notes.map(x => shift(x, modifier, false)) 
 			: shift(notes, modifier, false),
-	"<": (notes, modifier) => !isBeat(notes) && Array.isArray(notes) 
+	"<": (notes, modifier) => Array.isArray(notes) 
 			? notes.reverse() 
 			: notes,
 }
 
-
-
-const applyModifier = (notes, modifier, refs) => {
+const applyModifier = (notes, modifier) => {
 	const type = modifier.type;
 	if (type in modifiers) return modifiers[type](notes, modifier);
-	else if (type === "reference") {
-		const ref = refs[modifier.value];
-		const refType = 
-			Array.isArray(ref) ? "array" 
-			: typeof ref === "function" ? "function"
-			: "unexpected";
-
-		const switchOps = {
-			"function": ref => ref(Array.isArray(notes) ? notes : [notes]),
-			"array": ref => Array.isArray(notes) ? [...notes, ...ref] : [notes, ...ref]
-		}
-		if (!(refType in switchOps)) throw "Unexpected interpolated value."
-		return switchOps[refType](ref);
-
-	} else throw `Unrecongized modifier: ${modifier}`;
+	else throw `Unrecongized modifier: ${modifier}`;
 }
 
 // const applyModifier = (notes, modifier) => {
@@ -103,32 +78,26 @@ const applyModifier = (notes, modifier, refs) => {
 // 	}
 // }
 
-const compileNode = (node, refs) => {
-	// if (isBeat(node)) return { type: "beat", value: node[0], duration: node[1] };
-	if (!isBeat(node) && Array.isArray(node)) return compile(node, refs);
-	// else if (node.type === "symbol" || node.type === ";") return { type: "beat", value: node.value, duration: 1 }
-	else if (node.type === "symbol" || node.type === ";") return [ node.value, 1 ]
-	else if (node.type === "modifier") return node.modifiers.reduce( (acc, cur, i) => {
-			return applyModifier(acc, cur, refs);
-		}, compileNode(node.notes, refs))
+const compileNode = node => {
+	if (Array.isArray(node)) return compile(node);
+	else if (node.type === "symbol" || node.type === ";") return { type: "beat", value: node.value, duration: 1 }
+	else if (node.type === "modifier") return node.modifiers.reduce( (acc, cur) => {
+			return applyModifier(acc, cur);
+		}, compileNode(node.notes))
 }
 
-export const compile = (ast, refs = {}) => {
-	const result = [];
-	ast.forEach(item => {
-		const val = compileNode(item, refs);
+export const compile = ast => {
+	let i = 0;
+	let result = [];
+	while (i < ast.length) {
+		let current = ast[i];
+		let compiled = compileNode(current);
 
-		if (!isBeat(val) && Array.isArray(val)) {
-		  result.push(...val);
-		} else {
-		  result.push(val);
-		}
-	});
+		if (Array.isArray(compiled)) result.push(...compiled)
+		else result.push(compiled);
+
+		i++;
+	}
 
 	return result;
 }
-
-
-
-
-

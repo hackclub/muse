@@ -11,7 +11,6 @@ const tokenRules = {
   ws: /\s+/,
   literal: anyOf(literals),
   symbol: /[a-zA-Z][a-zA-Z\d\#]*/,
-  reference: /\$[\d]+/
 }
 
 const regExFunc = regex => string => { // not used
@@ -78,7 +77,7 @@ const convert = pred => s => {
 
 // const any = s => s[0] ? [ s[0], s.slice(1) ] : null; // Do I want this?
 
-const many = (pred, transform = null) => s => {
+const many = (pred) => s => {
   if (typeof pred === "string") pred = convert(pred);
 
   const arr = [];
@@ -90,7 +89,7 @@ const many = (pred, transform = null) => s => {
   }
 
   return arr.length > 0 
-    ? [ ( transform ? transform(arr.map(([x]) => x)) : arr.map(([x]) => x) ), arr[arr.length - 1][1] ] 
+    ? [ arr.map(([x]) => x), arr[arr.length - 1][1] ] 
     : [[], s];
 }
 
@@ -226,8 +225,7 @@ const modifier = s => many(or([
   "length",
   "<",
   and(["^", "number"]),
-  and(["_", "number"]),
-  "reference"
+  and(["_", "number"])
 ], convertModifier))(s)
 
 const parse = many(p);
