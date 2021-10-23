@@ -11,8 +11,8 @@ const tokenRules = {
   ws: /\s+/,
   literal: anyOf(literals),
   symbol: /[a-zA-Z][a-zA-Z\d\#]*/,
-  referenceFunc: /\$f[\d]+/,
-  referenceArr: /\$a[\d]+/
+  referenceFunc: /\$f[\d+]/,
+  referenceArr: /\$a[\d+]/
 }
 
 const regExFunc = regex => string => { // not used
@@ -40,10 +40,10 @@ const makeTokenizer = (rules, { skip = [], literals = [] } = { }) => string => {
       value = null;
       let rule = rules[key];
       if (rule instanceof RegExp) {
-        value = string.slice(index).match(rule);
+        let tempValue = string.slice(index).match(rule);
 
-        if (value !== null && value.index === 0) {
-          value = value[0];        
+        if (tempValue !== null && tempValue.index === 0) {
+          value = tempValue[0];        
           break;
         }
       } else if (typeof rule === "function") {

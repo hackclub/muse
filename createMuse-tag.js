@@ -22,8 +22,10 @@ export const museTag = (strs, ...vals) => { // should be able to insert array of
 				let tempName = `$a${i}`;
 				refs[tempName] = val;
 				result = result + str + tempName; 
-			} else {
+			} else if (typeof val === "string" || typeof val === "number") {
 				result = result + str + val; 
+			} else {
+				console.error("Unexpected interpolated value:", val);
 			}
 		} 
 	})
@@ -66,11 +68,11 @@ export const createMuseTag = samples => (ops = {}) => {
 			if (playing === false) continue; 
 			let [ symbol, beats ] = arr[i];
 			dispatch("ADD_PLAYED", { symbol });
-			if (symbol === ";") await sleep(60*1000/bpm*beats);
+			if (symbol === ";") await sleep(1000/bpm*60*beats);
 			else if (symbol in samples) samples[symbol](60*1000/bpm*beats, audioCtx);
 		}
 
-		playing = false;
+		// playing = false;
 
 		return arr;
 	}
