@@ -48,6 +48,7 @@ async function playNote(frequency, duration, ctx, ops = {}) {
 }
 
 function getLetters(ops) {
+  console.log(ops);
   const newLetters = {};
   for (const k in letters) {
     let hz = letters[k];
