@@ -115,6 +115,10 @@ body {
 	font-weight: 800;
 }
 
+.clear-played-trigger {
+	cursor: pointer;
+}
+
 .left-editor{
 	padding: 4px 16px 12px 16px;
 }

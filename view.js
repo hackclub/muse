@@ -33,7 +33,7 @@ export const view = (state) => html`
 			<div style="height: 100%;">
 				<div class="played-notes-heading-holder">
 					<span class="played-notes-heading">Played Notes</span> 
-					<small @click=${() => dispatch("CLEAR_PLAYED")}>Clear Sounds</small>
+					<small class="clear-played-trigger" @click=${() => dispatch("CLEAR_PLAYED")}>Clear Sounds</small>
 				</div>
 				<div class="played-log">${state.played.join(" ")}</div>
 			</div>
