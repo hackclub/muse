@@ -58,7 +58,7 @@ export const createMuseTag = samples => (ops = {}) => {
 
 	let playing = false;
 
-	async function run() {
+	async function play() { // run vs play?
 		const arr = museTag(...arguments);
 		// const arr = museTag(...arguments).map(({ value, duration }) => [value, duration]);
 
@@ -72,7 +72,7 @@ export const createMuseTag = samples => (ops = {}) => {
 			else if (symbol in samples) samples[symbol](60*1000/bpm*beats, audioCtx);
 		}
 
-		// playing = false;
+		// playing = false; // leave this out to call muse multiple times, stop is just a force stop
 
 		return arr;
 	}
@@ -83,7 +83,7 @@ export const createMuseTag = samples => (ops = {}) => {
 
 	// length, time
 
-	const museObj = { run, stop, compile }
+	const museObj = { play, stop, compile }
 
 	dispatch("ADD_ACTIVE_MUSE", { newMuse: museObj })
 
@@ -97,6 +97,9 @@ export const createMuse = samples => (ops = {}) => {
 
 	return newMuse;
 }
+
+const length = x => x.reduce((acc, cur) => acc + (cur[0] == ";" ? cur[1] : 0), 0)
+
 
 
 
