@@ -27,6 +27,7 @@ export const view = (state) => html`
 				<button @click=${() => dispatch("EXAMPLES", { show: !state.showExamples })}>
 					examples
 				</button>
+				<button @click=${() => dispatch("TOGGLE_COLOR_MODE", {})}>light/dark</button>
 			</div>
 		</div>
 		<div class="left-editor">

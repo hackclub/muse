@@ -21,6 +21,7 @@ const STATE = {
 	showExamples: false,
 	examples: [],
 	showShared: false,
+	colorMode: "light",
 }
 
 function copy(str) {
@@ -32,10 +33,32 @@ function copy(str) {
 	inp.remove();
 }
 
-
 const ACTIONS = {
 	INIT: init,
 	RENDER: (args, state) => { render(view(STATE), document.body) },
+	TOGGLE_COLOR_MODE: (args, state) => {
+		const setProp = (name, val) => document.documentElement.style.setProperty(name, val);
+
+		let mode = args.mode;
+		if (!mode) {
+			if (state.colorMode === "dark") mode = "light";
+			else if (state.colorMode === "light") mode = "dark";
+		}
+
+		if (mode === "dark") {
+			setProp("--text-color", "white");
+			setProp("--background", "var(--dark-background)");
+			setProp("--background-2", "var(--dark-background-2)");
+			setProp("--cm-filter", "invert(1)");
+		} else if (mode === "light") {
+			setProp("--text-color", "black");
+			setProp("--background", "var(--light-background)");
+			setProp("--background-2", "var(--light-background-2)");
+			setProp("--cm-filter", "");
+		}
+
+		state.colorMode = mode;
+	},
 	ADD_ACTIVE_MUSE: ({ newMuse }, state) => {
 		state.activeMuses.push(newMuse);
 	},
@@ -111,7 +134,7 @@ const ACTIONS = {
 	}
 }
 
-const dispatch = (action, args) => {
+const dispatch = (action, args = {}) => {
 	if (action in ACTIONS) ACTIONS[action](args, STATE);
 	else console.error("Unrecongized action:", action);
 }

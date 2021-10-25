@@ -7,6 +7,7 @@ let audioChunks = [];
 
 export async function init(args, state) {
 	dispatch("RENDER");
+    dispatch("TOGGLE_COLOR_MODE", { mode: state.colorMode })
 
 	listenBody("click", ".trigger-play", () => {
 		dispatch("PLAY");

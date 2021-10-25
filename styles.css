@@ -31,14 +31,28 @@
 
 :root {
   --color: #8686868c;
+  --dark-background: #121217;
+  --dark-background-2: #252429;
+  --light-background: #f9fafc;
+  --light-background-2: #e0e6ed;
+
+/*  --text-color: white;
+  --background: var(--dark-background);
+  --background-2: var(--dark-background-2);
+  --cm-filter: invert(1);*/
+
+  --text-color: black;
+  --background: var(--light-background);
+  --background-2: var(--light-background-2);
+  --cm-filter: "";
 }
 
 body {
 	overflow: none;
 	margin: 0px;
 	font-family: 'Phantom Sans';
-	background: #121217;
-	color: white;
+	background: var(--background);
+	color: var(--text-color);
 }
 
 .editor {
@@ -130,7 +144,7 @@ body {
 	border-radius: 5px;
 	overflow: scroll;
 	border: 1px solid rgb(51, 51, 51);
-	background: #252429;
+	background: var(--background-2);
 }
 
 .examples { 
@@ -141,7 +155,7 @@ body {
     transform: translate(-50%, -50%);
     width: 70%;
     height: 80%;
-    background: lightgrey;
+    background: var(--background-2);
     border: 2px solid black;
     padding: 15px;
     border-radius: 10px;
@@ -152,55 +166,13 @@ body {
 }
 
 .example {
+	color: var(--text-color);
 	border: 1px solid black;
     border-radius: 5px;
     cursor: pointer;
     padding: 5px;
     margin: 5px;
-    background: azure;
-}
-
-.example:hover {
-	opacity: .8;
-}
-
-.shared-confirmation {
-	position: fixed;
-	left: 50%;
-	top: 30%;
-	transform: translate(-50%, -50%);
-	padding: 5px 20px;
-	background: gray;
-	border-radius: 5px;
-	text-align: center;
-	border:  2px solid black;
-}
-
-.examples { 
-	display: flex;
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 70%;
-    height: 80%;
-    background: lightgrey;
-    border: 2px solid black;
-    padding: 15px;
-    border-radius: 10px;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    justify-content: start;
-    align-content: flex-start;
-}
-
-.example {
-	border: 1px solid black;
-    border-radius: 5px;
-    cursor: pointer;
-    padding: 5px;
-    margin: 5px;
-    background: azure;
+    background: var(--background);
 }
 
 .example:hover {
@@ -236,7 +208,7 @@ body {
 
 #sample-list>li {
     list-style: none;
-	background: #252429;
+	background: var(--background-2);
 	margin-right: 0.5em;
 	margin-bottom: 0.5em;
 	padding: 0.2em 0.5em;
@@ -246,7 +218,9 @@ body {
 }
 
 #sample-list>li>span {
+	display: flex;
     cursor: pointer;
+    align-items: center;
 }
 
 .playing {
@@ -308,13 +282,18 @@ body {
 	caret-color: white
 }
 
+/*what about these things*/
+/*
+
 .cm-selectionBackground {
-	background: #222
+	background: #222;
 }
 
 .cm-focused .cm-selectionBackground {
-	background: #233
+	background: #233;
 }
+
+*/
 
 .cm-cursor {
 	border-left-color: #444
@@ -328,14 +307,14 @@ body {
 }
 
 .cm-button:active {
-		background-image: linear-gradient(#111, #333)
+	background-image: linear-gradient(#111, #333)
 }
 .cm-textfield {
 	border: "1px solid #555";
 	background-color: "inherit";
 }
 .cm-editor { 
-	filter: invert(1); 
+	filter: var(--cm-filter);
 	color: black; 
 	margin-left: 8px; 
 	border-radius: 8px;
