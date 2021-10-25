@@ -63,36 +63,38 @@ const drawSamples = (state) => html`
 		}}></small>
 	</div>
 		<div id="sample-list">
-		${state.samples.map( (sample, i) => html`
-			<li class="${sample.deleted ? 'deleted' : ''}">
-				<span class="sample-name" @click=${(e) => {
-					const audio = document.querySelector(`#${sample.name}-audio`)
-					audio.volume = state.sampleVolume;
-					audio.currentTime = 0;
-					audio.play()
-				}}>${sample.name}</span>
-				<span class="delete" @click="${(e) => {
-					const shouldContinue = confirm("Are you sure you want to delete this sample?")
-					if (shouldContinue) {
-						document.querySelector(`#${sample.name}-audio`).pause()
-						dispatch("DELETE_SAMPLE", {index: i})
-					}
-				}}">x</span>
-				<audio
-					id="${sample.name}-audio"
-					src="${sample.url}" 
-					@play=${(e) => {
-						e.target.parentElement.querySelector('.sample-name').classList.add('playing')
-					}}
-					@pause=${(e) => {
-						e.target.parentElement.querySelector('.sample-name').classList.remove('playing')
-					}}
-				></audio>
-			</li>
-		`)}
+		${drawSamplesList(state)}
 		</div>
 	</div>
 `
+
+const drawSamplesList = state => state.samples.map( (sample, i) => html`
+	<li class="${sample.deleted ? 'deleted' : ''}">
+		<span class="sample-name" @click=${(e) => {
+			const audio = document.querySelector(`#${sample.name}-audio`)
+			audio.volume = state.sampleVolume;
+			audio.currentTime = 0;
+			audio.play()
+		}}>${sample.name}</span>
+		<span class="delete" @click="${(e) => {
+			const shouldContinue = confirm("Are you sure you want to delete this sample?")
+			if (shouldContinue) {
+				document.querySelector(`#${sample.name}-audio`).pause()
+				dispatch("DELETE_SAMPLE", {index: i})
+			}
+		}}">x</span>
+		<audio
+			id="${sample.name}-audio"
+			src="${sample.url}" 
+			@play=${(e) => {
+				e.target.parentElement.querySelector('.sample-name').classList.add('playing')
+			}}
+			@pause=${(e) => {
+				e.target.parentElement.querySelector('.sample-name').classList.remove('playing')
+			}}
+		></audio>
+	</li>
+`)
 
 
 
