@@ -1,5 +1,4 @@
-// import { createMuse as createMuseTemp } from "./Muse.js";
-import { createMuse, compile, length } from "./createMuse-tag.js";
+import { createMuse, compile, length } from "./createMuse.js";
 
 function playSample(name, context, state) {
 	const audio = document.querySelector(`#${name}-audio`);

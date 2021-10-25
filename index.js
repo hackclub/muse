@@ -4,7 +4,6 @@ import { view } from "./view.js";
 import { initialSamples } from "./samples.js";
 import { init } from "./init.js";
 import { play } from "./play.js";
-import { createMuse } from "./createMuse-tag.js";
 
 import "./test.js";
 
