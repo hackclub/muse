@@ -30,10 +30,10 @@ export const view = (state) => html`
 			</div>
 		</div>
 		<div class="left-editor">
-			<div>
+			<div style="height: 100%;">
 				<div class="played-notes-heading-holder">
 					<span class="played-notes-heading">Played Notes</span> 
-					<button class="hc-button" @click=${() => dispatch("CLEAR_PLAYED")}>Clear Sounds</button>
+					<small @click=${() => dispatch("CLEAR_PLAYED")}>Clear Sounds</small>
 				</div>
 				<div class="played-log">${state.played.join(" ")}</div>
 			</div>

@@ -52,11 +52,8 @@ body {
 
 .left-editor {
 	margin-top: 8px;
-	display: grid;
-	grid-template: 
-		"." 50%
-		"." 50%
-		/ 100%;
+	display: flex;
+	flex-direction: column;
 }
 
 .cm-wrap { 
@@ -123,7 +120,7 @@ body {
 }
 
 .played-log {
-	height: 92%;
+	height: 40vh;
 	box-sizing: border-box;
 	padding: 10px;
 	border-radius: 5px;
@@ -258,6 +255,10 @@ body {
 	color: #ec3750;
 }
 
+.played-notes-heading-holder{
+	margin-bottom: 12px;
+}
+
 .delete:hover {
 	opacity: .5;
 }
@@ -281,7 +282,7 @@ body {
 }
 
 #recording-button.ready::before {
-    content: '⏺️ Record new sample';
+    content: '⏺ Record new sample';
 }
 
 #recording-button.recording::before {
