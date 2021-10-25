@@ -30,7 +30,7 @@ export const view = (state) => html`
 			</div>
 		</div>
 		<div class="left-editor">
-			<div style="height: 100%;">
+			<div>
 				<div class="played-notes-heading-holder">
 					<span class="played-notes-heading">Played Notes</span> 
 					<small class="clear-played-trigger" @click=${() => dispatch("CLEAR_PLAYED")}>Clear Sounds</small>
