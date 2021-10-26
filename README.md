@@ -10,14 +10,13 @@ To create a song create a muse and pass in your code.
 createMuse().play`a4+ ;- [ c5 ; e5 ] x 4`
 ```
 
-The language has notes: a | a# | b | c | c# | d | d# | e | f | f# | g | g#  
-with an optional number 1 - 10 for pitch.
+The language has notes: `a`, `a#`, `b`, `c`, `c#`, `d`, `d#`, `e`, `f`, `f#`, `g` & `g#`  with an optional number suffix (from `1` to `10`) for pitch. For example:
 
 ```
 a4
 ```
 
-You can lengthen notes with a "+" after:
+You can lengthen notes by appending a `+`:
 
 ```
 a4+
@@ -25,7 +24,7 @@ a4++
 a4+++
 ```
 
-or shorten them with a "-" after:
+or shorten them by appending a `-`:
 
 ```
 a4-
@@ -33,47 +32,47 @@ a4--
 a4---
 ```
 
-each "+" or "-" correpsonds to a power of 2
+Each `+` or `-` corresponds to a power of 2.
 
-A pause is ";" which can also be lengthened or shortened
+A pause is `;` which can also be lengthened or shortened.
 
-so an arpeggio is 
+So an arpeggio is:
 
 ```
 a4 ; c5 ; e5
 ```
 
-and a chord is
+And a chord is:
 
 ```
 a4 c5 e5
 ```
 
-A group is denoted with brackets "[ ]"
+A group is denoted with brackets `[ ]`:
 
 ```
 [ a4 c5 e5 ]++
 ```
 
-To repeat something use "x" and some number
+To repeat something use `x` and some number:
 
 ```
 [ a4 c5 e5 ; ] x 4
 ```
 
-createMuse also takes some optional arguments for beats per minute and wave type:
+`createMuse` also takes some optional arguments for beats per minute and wave type:
 
 ```js
 createMuse({ bpm: 10, type: "sine" }) // type can be sine | sawtooth | triangle | square
 ```
 
-You can also use samples that are listed on the right.
+You can also use samples that are listed on the right:
 
 ```js
 createMuse().play`bubbles ; bubbles -`
 ```
 
-To play multiple tracks just call play multiple times.
+To play multiple tracks just call play multiple times:
 
 ```js
 const muse = createMuse()
@@ -81,7 +80,7 @@ muse.play`[ a4 ; e4 ; d5 ; ]`
 muse.play`[ a5 ; e5 ; d6 ; ]`
 ```
 
-Offset notes up by half steps with "^".
+Offset notes up by half steps with a `^`:
 
 ```js
 const muse = createMuse()
@@ -89,7 +88,7 @@ muse.play`[ a4 ; e4 ; d5 ; ]`
 muse.play`[ a4 ; e4 ; d5 ; ] ^ 3`
 ```
 
-Offset notes down by half steps with "\_".
+Offset notes down by half steps with a `_`.
 
 ```js
 const muse = createMuse()
@@ -97,9 +96,9 @@ muse.play`[ a4 ; e4 ; d5 ; ]`
 muse.play`[ a4 ; e4 ; d5 ; ] _ 3`
 ```
 
-You can also bind functions to keys with the bindKey function. The key will correspond to the keydown event key and the value to the callback function.
+You can also bind functions to keys with the `bindKey` function. The key will correspond to the `keydown` event key and the value to the callback function.
 
-Here is an example keyboard with the bindKey function:
+Here is an example keyboard with the `bindKey` function:
 
 ```js
 const key = 4
@@ -136,14 +135,14 @@ If the playback is becoming choppy, just refresh the browser. Your current proje
 
 ## Advanced
 
-Create your own custom modifier by interpolating in a function.
+Create your own custom modifier by interpolating in a function:
 
 ```js
 const muse = createMuse();
 muse.play`[ a4 ; e4 ; d5 ; ]  ${x => x.reverse()}``
 ```
 
-The function will be called with the preceeding notes in a compiled array form: [symbol, beats]
+The function will be called with the preceding notes in a compiled array form: `[symbol, beats]`.
 
 An array in this form can be returned or passed in directly.
 
@@ -163,7 +162,4 @@ createMuse().play`
 
 Code editor created using the amazing [CodeMirror](https://codemirror.net/).
 
-Samples come from [Patatap](https://www.patatap.com/) a delightful interactive art piece.
-
-
-
+Audio samples come from [Patatap](https://www.patatap.com/), a delightful interactive art piece.
