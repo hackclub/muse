@@ -171,5 +171,11 @@ createMuse().play`
 
 ```
 
+## Acknowledgements
+
+Code editor created using the amazing [CodeMirror](https://codemirror.net/).
+
+Samples come from [Patatap](https://www.patatap.com/) a delightful interactive art piece.
+
 
 
