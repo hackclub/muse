@@ -161,13 +161,13 @@ An array in this form can be returned or passed in directly.
 This custom modifier with shorten pauses and lengthen other notes:
 
 ```
-const costumModifier = x => x.map( ([sym, dur]) => sym === ";" 
+const customModifier = x => x.map( ([sym, dur]) => sym === ";" 
   ? [sym, dur * .2] 
   : [sym, dur * 2]
 )
 
 createMuse().play`
-  [ a4 ; e4 ; d5 ; c5 ; e4 ; d5 ; ] ${costumModifier}`
+  [ a4 ; e4 ; d5 ; c5 ; e4 ; d5 ; ] ${customModifier}`
 
 ```
 
