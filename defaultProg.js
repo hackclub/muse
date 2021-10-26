@@ -1,26 +1,25 @@
 export const defaultProg = `
 // song goes here
-createMuse({ bpm: 110, type: "sine" }).play(
-\`
+createMuse({ bpm: 110, type: "sine" }).play\`
 
 
 \`
-)
+
 
 
 // below maps keys sounds
 const key = 4
 const type = "triangle" // sine | triangle | square | sawtooth
 
-const a = () => createMuse({ type }).play(\`a\${key}\`)
-const s = () => createMuse({ type }).play(\`b\${key}\`)
-const d = () => createMuse({ type }).play(\`c\${key+1}\`)
-const f = () => createMuse({ type }).play(\`d\${key+1}\`)
-const g = () => createMuse({ type }).play(\`e\${key+1}\`)
-const h = () => createMuse({ type }).play(\`f#\${key+1}\`)
-const j = () => createMuse({ type }).play(\`g\${key+1}\`)
-const k = () => createMuse({ type }).play(\`a\${key+1}\`)
-const l = () => createMuse({ type }).play(\`b\${key+1}\`)
+const a = () => createMuse({ type }).play\`a\${key}\`
+const s = () => createMuse({ type }).play\`b\${key}\`
+const d = () => createMuse({ type }).play\`c\${key+1}\`
+const f = () => createMuse({ type }).play\`d\${key+1}\`
+const g = () => createMuse({ type }).play\`e\${key+1}\`
+const h = () => createMuse({ type }).play\`f#\${key+1}\`
+const j = () => createMuse({ type }).play\`g\${key+1}\`
+const k = () => createMuse({ type }).play\`a\${key+1}\`
+const l = () => createMuse({ type }).play\`b\${key+1}\`
 
 // these keys get bound
 bindKeys({ 
