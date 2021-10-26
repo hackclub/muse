@@ -7,9 +7,8 @@ Muse is a simple language embedded in a JavaScript environment.
 
 To create a song create a muse and pass in your code.
 
-```
+```js
 createMuse().play`a4+ ;- [ c5 ; e5 ] x 4`
-
 ```
 
 The language has notes: a | a# | b | c | c# | d | d# | e | f | f# | g | g#  
@@ -49,69 +48,61 @@ and a chord is
 
 ```
 a4 c5 e5
-
 ```
 
 A group is denoted with brackets "[ ]"
 
 ```
 [ a4 c5 e5 ]++
-
 ```
 
 To repeat something use "x" and some number
 
 ```
 [ a4 c5 e5 ; ] x 4
-
 ```
 
 createMuse also takes some optional arguments for beats per minute and wave type:
 
-```
+```js
 createMuse({ bpm: 10, type: "sine" }) // type can be sine | sawtooth | triangle | square
-
 ```
 
 You can also use samples that are listed on the right.
 
-```
+```js
 createMuse().play`bubbles ; bubbles -`
-
 ```
 
 To play multiple tracks just call play multiple times.
 
-```
+```js
 const muse = createMuse()
 muse.play`[ a4 ; e4 ; d5 ; ]`
 muse.play`[ a5 ; e5 ; d6 ; ]`
-
 ```
 
 Offset notes up by half steps with "^".
 
-```
+```js
 const muse = createMuse()
 muse.play`[ a4 ; e4 ; d5 ; ]`
 muse.play`[ a4 ; e4 ; d5 ; ] ^ 3`
-
 ```
 
 Offset notes down by half steps with "\_".
 
-```
+```js
 const muse = createMuse()
 muse.play`[ a4 ; e4 ; d5 ; ]`
 muse.play`[ a4 ; e4 ; d5 ; ] _ 3`
-
 ```
 
 You can also bind functions to keys with the bindKey function. The key will correspond to the keydown event key and the value to the callback function.
 
 Here is an example keyboard with the bindKey function:
 
-```
+```js
 const key = 4
 const type = "triangle" // sine | triangle | square | sawtooth
 
@@ -137,7 +128,6 @@ bindKeys({
   k, 
   l 
 })
-
 ```
 
 The console on the right of the editor just logs whatever was played.
@@ -149,7 +139,7 @@ If the playback is becoming choppy, just refresh the browser. Your current proje
 
 Create your own custom modifier by interpolating in a function.
 
-```
+```js
 const muse = createMuse();
 muse.play`[ a4 ; e4 ; d5 ; ]  ${x => x.reverse()}``
 ```
@@ -160,7 +150,7 @@ An array in this form can be returned or passed in directly.
 
 This custom modifier with shorten pauses and lengthen other notes:
 
-```
+```js
 const customModifier = x => x.map( ([sym, dur]) => sym === ";" 
   ? [sym, dur * .2] 
   : [sym, dur * 2]
@@ -168,7 +158,6 @@ const customModifier = x => x.map( ([sym, dur]) => sym === ";"
 
 createMuse().play`
   [ a4 ; e4 ; d5 ; c5 ; e4 ; d5 ; ] ${customModifier}`
-
 ```
 
 ## Acknowledgements
