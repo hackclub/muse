@@ -139,7 +139,7 @@ Create your own custom modifier by interpolating in a function:
 
 ```js
 const muse = createMuse();
-muse.play`[ a4 ; e4 ; d5 ; ]  ${x => x.reverse()}``
+muse.play`[ a4 ; e4 ; d5 ; ]  ${x => x.reverse()}`
 ```
 
 The function will be called with the preceding notes in a compiled array form: `[symbol, beats]`.
@@ -155,7 +155,8 @@ const customModifier = x => x.map( ([sym, dur]) => sym === ";"
 )
 
 createMuse().play`
-  [ a4 ; e4 ; d5 ; c5 ; e4 ; d5 ; ] ${customModifier}`
+  [ a4 ; e4 ; d5 ; c5 ; e4 ; d5 ; ] ${customModifier}
+`
 ```
 
 ## Acknowledgements
