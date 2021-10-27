@@ -30,15 +30,15 @@ const museTag = (strs, ...vals) => {
 		} 
 	})
 
-	// console.log(result);
+	console.log(result);
 
 	const toks = tokenize(result);
-	// console.log(toks);
+	console.log(toks);
 
 	const [ ast, remainder ] = parse(toks);
-	// console.log(ast);
+	console.log(ast);
 	const compiled = compileTemp(ast, refs);
-	// console.log(compiled);
+	console.log(compiled);
 	return compiled;
 }
 
@@ -62,7 +62,7 @@ class Muse {
 		this.volume = ops.volume ?? 100; // TODO
 
 		const type = ops.type ?? "sine";
-		const synthOptions = { type };
+		const synthOptions = { type, volume: this.volume };
 
 		this.samples = { ...samples, ...getLetters(synthOptions) };
 		this.playing = false;

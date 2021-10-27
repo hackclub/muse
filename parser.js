@@ -9,8 +9,8 @@ const tokenRules = {
   number: /\d+/,
   length: /\-+|\++/,
   ws: /\s+/,
-  literal: anyOf(literals),
   symbol: /[a-zA-Z][a-zA-Z\d\#]*/,
+  literal: anyOf(literals),
   referenceFunc: /\$f[\d+]/,
   referenceArr: /\$a[\d+]/
 }

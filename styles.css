@@ -259,6 +259,18 @@ body {
     cursor: pointer;
 }
 
+#recording-button.three::before {
+    content: 'Begin in 3';
+}
+
+#recording-button.two::before {
+    content: 'Begin in 2';
+}
+
+#recording-button.one::before {
+    content: 'Begin in 1';
+}
+
 #recording-button.ready::before {
     content: '⏺ Record new sample';
 }

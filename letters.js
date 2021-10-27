@@ -1,3 +1,13 @@
+import { Synth } from "./audiosynth.js";
+
+
+const instruments = {
+  piano: Synth.createInstrument('piano'),
+  edm: Synth.createInstrument('edm'),
+  acoustic: Synth.createInstrument('acoustic'),
+  organ: Synth.createInstrument('organ'),
+}
+
 let letters = {
   "c": 16.35,
   "c#": 17.32,
@@ -48,12 +58,28 @@ async function playNote(frequency, duration, ctx, ops = {}) {
 }
 
 function getLetters(ops) {
-  console.log(ops);
+  const type = ops.type ?? "sine";
+  const volume = ops.volume ?? 100;
+
   const newLetters = {};
-  for (const k in letters) {
-    let hz = letters[k];
-    newLetters[k] = (duration, ctx) => playNote(hz, duration, ctx, ops);
-  }
+  if ( ["sine", "triangle", "square", "sawtooth"].includes(type) ) {
+    for (const k in letters) {
+      let hz = letters[k];
+      newLetters[k] = (duration, ctx) => playNote(hz, duration, ctx, ops);
+    }
+  } else if ( ["piano", "edm", "organ", "acoustic"].includes(type) ) {
+    const instrument = instruments[type]
+    Synth.setVolume(volume/100);
+    const twelveNotes = ["a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"];
+    for (let i = 1; i < 9; i++) {
+      twelveNotes.forEach(n => {
+        const note = n.toUpperCase();
+        newLetters[`${n}${i}`] = (duration) => instrument.play(note, i, duration/1000);
+      })
+    }
+  } else console.error("Unexpected synth type:", type)
+
+  console.log(newLetters);
 
   return newLetters;
 }

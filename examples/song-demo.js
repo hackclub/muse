@@ -7,8 +7,14 @@ const muse = createMuse({ type, volume, bpm })
 
 // song goes here
 muse.play`
-
+[ [ d4;d4;d4;d4;d4;d4;d4;d4;f4;f4;f4;f4;c4;c4;c4;c4 ] - ] x 10
 `
+
+muse.play`
+; [ [ d4;d4;d4;d4;d4;d4;d4;d4;f4;f4;f4;f4;c4;c4;c4;c4 ] - ^ 5 ] x 10
+`
+
+
 
 // below maps keys sounds
 const a = () => muse.play`a${key}`

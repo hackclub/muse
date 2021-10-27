@@ -1,3 +1,11 @@
+import { Synth } from "./audiosynth.js";
+
+var piano = Synth.createInstrument('piano');
+
+// piano.play('C#', 6, 2);
+
+
+
 // import { compile } from "./compile.js";
 // import { parse, tokenize } from "./parser.js";
 // import { museTag } from "./createMuse-tag.js";

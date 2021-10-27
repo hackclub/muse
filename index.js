@@ -66,9 +66,26 @@ const ACTIONS = {
 		dispatch("RENDER");
 	},
 	START_RECORDING: (args, state) => {
-		state.rec.start()
-		state.recordingStatus = "recording"
+
+		state.recordingStatus = "three"
 		dispatch("RENDER");
+
+		setTimeout(() => {
+				state.recordingStatus = "two"
+			dispatch("RENDER");
+		}, 1000);
+
+		setTimeout(() => {
+			state.recordingStatus = "one"
+			dispatch("RENDER");
+		}, 2000);
+
+		setTimeout(() => {
+			state.rec.start()
+			state.recordingStatus = "recording"
+			dispatch("RENDER");
+		}, 3000);
+
 	},
 	ADD_SAMPLE: (sample, state) => {
 		state.recordingStatus = "ready"
