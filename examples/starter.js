@@ -1,16 +1,17 @@
 // settings
-const key = 5
 const type = "sine" // sine | triangle | square | sawtooth | piano | acoustic | edm | organ
-const volume = 50
 const bpm = 120
 const muse = createMuse({ type, volume, bpm })
 
 // song goes here
+//"a", "a#", "b", "c", "c#", "d", "d#", "e", "f", "f#", "g", "g#"
 muse.play`
 
 `
 
 // below maps keys sounds
+const key = 4
+
 const a = () => muse.play`a${key}`
 const s = () => muse.play`b${key}`
 const d = () => muse.play`c${key+1}`

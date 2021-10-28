@@ -30,15 +30,15 @@ const museTag = (strs, ...vals) => {
 		} 
 	})
 
-	console.log(result);
+	// console.log(result);
 
 	const toks = tokenize(result);
 	console.log(toks);
 
 	const [ ast, remainder ] = parse(toks);
-	console.log(ast);
+	// console.log(ast);
 	const compiled = compileTemp(ast, refs);
-	console.log(compiled);
+	// console.log(compiled);
 	return compiled;
 }
 
@@ -89,7 +89,7 @@ const createMuse = samples => (ops = {}) => {
 }
 
 const length = x => x.reduce((acc, cur) => acc + (cur[0] == ";" ? cur[1] : 0), 0)
-const compile = () => museTag(...arguments);
+const compile = (...args) => museTag(...args);
 
 
 export { createMuse, compile, length };
