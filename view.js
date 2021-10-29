@@ -28,6 +28,7 @@ export const view = (state) => html`
 					examples
 				</button>
 				<button @click=${() => dispatch("TOGGLE_COLOR_MODE", {})}>light/dark</button>
+				<a href="https://github.com/hackclub/muse" target="_blank">GitHub</a>
 			</div>
 		</div>
 		<div class="left-editor">

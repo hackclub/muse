@@ -95,7 +95,9 @@ body {
 	
 }
 
-.button-container > button, .hc-button {
+.button-container > button, 
+.hc-button, 
+.button-container > a {
 	margin: 5px;
 	background: #ec3750;
 	color: white;
@@ -109,7 +111,17 @@ body {
 	opacity: 1;
 }
 
-.button-container > button:hover, .hc-button:hover {
+.button-container > a {
+	height: 30px;
+	box-sizing: border-box;
+	text-decoration: none;
+	display: grid;
+	place-content: center;
+}
+
+.button-container > button:hover, 
+.hc-button:hover,
+.button-container > a:hover  {
 	opacity: 0.7;
 }
 
