@@ -66,7 +66,7 @@ To repeat something use `x` and some number:
 createMuse({ bpm: 10, type: "sine" }) // type can be sine | sawtooth | triangle | square
 ```
 
-You can also use samples that are listed on the right:
+You can also use samples that are listed to the right of the editor:
 
 ```js
 createMuse().play`bubbles ; bubbles -`
