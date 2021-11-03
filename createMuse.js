@@ -33,7 +33,7 @@ const museTag = (strs, ...vals) => {
 	// console.log(result);
 
 	const toks = tokenize(result);
-	console.log(toks);
+	// console.log(toks);
 
 	const [ ast, remainder ] = parse(toks);
 	// console.log(ast);

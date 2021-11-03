@@ -1,1 +1,1 @@
-export { createMuse } from "./createMuse.js";
+export { Muse } from "./createMuse.js";
