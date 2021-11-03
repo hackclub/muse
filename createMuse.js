@@ -57,12 +57,13 @@ async function playHelper(that, args) {
 }
 
 class Muse {
-	constructor(samples, ops = {}) {
+	constructor(ops = {}) {
 		this.bpm = ops.bpm ?? 110;
 		this.volume = ops.volume ?? 100; // TODO
 
 		const type = ops.type ?? "sine";
 		const synthOptions = { type, volume: this.volume };
+		const samples = ops.samples ?? {};
 
 		this.samples = { ...samples, ...getLetters(synthOptions) };
 		this.playing = false;
@@ -81,8 +82,9 @@ class Muse {
 
 }
 
-const createMuse = samples => (ops = {}) => {
-	const newMuse = new Muse(samples, ops);
+const createMuse = (samples = {}) => (ops = {}) => {
+	ops.samples = samples;
+	const newMuse = new Muse(ops);
 	dispatch("ADD_ACTIVE_MUSE", { newMuse })
 
 	return newMuse;
