@@ -56,7 +56,7 @@ async function playHelper(that, args) {
 	}
 }
 
-class Muse {
+export class Muse {
 	constructor(ops = {}) {
 		this.bpm = ops.bpm ?? 110;
 		this.volume = ops.volume ?? 100; // TODO
