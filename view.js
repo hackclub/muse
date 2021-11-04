@@ -84,7 +84,7 @@ const drawSamplesList = state => state.samples.map( (sample, i) => html`
 				document.querySelector(`#${sample.name}-audio`).pause()
 				dispatch("DELETE_SAMPLE", {index: i})
 			}
-		}}">x</span>
+		}}">+</span>
 		<audio
 			id="${sample.name}-audio"
 			src="${sample.url}" 
