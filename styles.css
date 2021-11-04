@@ -243,7 +243,7 @@ body {
 .delete {
 	font-size: 28px;
 	transform: rotate(45deg) translateY(1px);
-	margin-left: 0.1em;
+	margin-left: 0.2em;
 	color: #ec3750;
 }
 
