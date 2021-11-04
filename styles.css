@@ -260,11 +260,13 @@ body {
 
 .playing.sample-name::before {
     font-style: normal;
-    content: '⏸️ ';
+    margin-right: 4px;
+    content: '⏸️';
 }
 
 .sample-name::before {
-    content: '▶️ ';
+    margin-right: 4px;
+    content: '▶️';
 }
 
 #recording-button {
