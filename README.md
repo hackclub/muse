@@ -163,20 +163,18 @@ createMuse().play`
 
 The `Muse` class can be imported through modules. For example:
 
-```
-<script type="module">
-  import { Muse } from "https://muse.hackclub.dev/exports.js";
-  import confetti from 'https://cdn.skypack.dev/canvas-confetti';
+```js
+import { Muse } from "https://muse.hackclub.dev/exports.js";
+import confetti from 'https://cdn.skypack.dev/canvas-confetti';
 
-  const samples = {
-    "confetti": (ctx, duration) => confetti()
-  }
-  const muse = new Muse({ samples });
-  muse.play`
-    a4; c5 confetti; e5;
-    confetti ;
-  `
-</script>
+const samples = {
+  "confetti": (ctx, duration) => confetti()
+}
+const muse = new Muse({ samples });
+muse.play`
+  a4; c5 confetti; e5;
+  confetti ;
+`
 ```
 
 ## Acknowledgements
