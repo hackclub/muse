@@ -4,7 +4,7 @@
 
 Muse is a simple language embedded in a JavaScript environment.
 
-This is a documentation page. For some tips on composing with muse and an intro video check out this [workshop page](https://workshops.hackclub.com/muse/) and [intro video can be found here](https://www.youtube.com/watch?v=hAcQ2x1PTYM).
+This is a documentation page. For some tips on composing with muse and an intro video check out this [workshop page](https://workshops.hackclub.com/muse/), [The intro video can also be found here](https://www.youtube.com/watch?v=hAcQ2x1PTYM).
 
 To create a song create a muse and pass in your code.
 
