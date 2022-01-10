@@ -156,6 +156,7 @@ const dispatch = (action, args = {}) => {
 }
 
 window.dispatch = dispatch;
+window.IS_MUSE_EDITOR = true;
 
 dispatch("INIT");
 
