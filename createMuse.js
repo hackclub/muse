@@ -54,6 +54,8 @@ async function playHelper(that, args) {
 		if (symbol === ";") await sleep(1000/that.bpm*60*beats);
 		else if (symbol in that.samples) that.samples[symbol](60*1000/that.bpm*beats, audioCtx);
 	}
+
+	that.playing = false;
 }
 
 export class Muse {
