@@ -92,7 +92,9 @@ body {
 	display: flex;
 	place-content: center;
 	align-items: center;
-	
+	flex-wrap: wrap;
+  align-items: center;
+  align-content: flex-start;
 }
 
 .button-container > button, 

@@ -71,7 +71,7 @@ export class Muse {
 		this.playing = false;
 	}
 
-	play() {
+	play() {		
 		playHelper(this, arguments)
 
 		return this; // arr?
