@@ -1,6 +1,6 @@
 # 🎸 Muse: a simple language for jamming!
 
-**[Launch the Muse Editor →](https://hackclub.github.io/muse/)**
+**[Launch the Muse Editor →](https://muse.hackclub.com)**
 
 Muse is a simple language embedded in a JavaScript environment.
 
