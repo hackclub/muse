@@ -30,7 +30,7 @@ const starterSamples = [
 export function initialSamples() {
     return starterSamples.map(name => ({
         name,
-        url: `https://hackclub.github.io/muse/samples/${name}.mp3`,
+        url: `https://muse.hackclub.com/samples/${name}.mp3`,
         provided: true,
     }))
 }
