@@ -49,8 +49,6 @@ async function playHelper(that, args) {
 	for (let i = 0; i < arr.length; i++) {
 		if (that.playing === false) continue; 
 		let [ symbol, beats ] = arr[i];
-		console.log(arr[i])
-		window.museCurrentlyPlaying = arr[0];
 		if (window.IS_MUSE_EDITOR) dispatch("ADD_PLAYED", { symbol });
 		if (symbol === ";") await sleep(1000/that.bpm*60*beats);
 		else if (symbol in that.samples) that.samples[symbol](60*1000/that.bpm*beats, audioCtx);
