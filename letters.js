@@ -30,7 +30,6 @@ for (let i = 1; i < 10; i++) {
 }
 
 async function playNote(frequency, duration, ctx, ops = {}) {
-  window.museCurrentlyPlaying = frequency;
   var o = ctx.createOscillator()
   var g = ctx.createGain()
   o.frequency.value = frequency;
