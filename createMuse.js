@@ -44,12 +44,12 @@ const museTag = (strs, ...vals) => {
 
 async function playHelper(that, args) {
 	const arr = museTag(...args);
-
+	window.museQueued = arr;
 	that.playing = true;
-
 	for (let i = 0; i < arr.length; i++) {
 		if (that.playing === false) continue; 
 		let [ symbol, beats ] = arr[i];
+		window.museCurrentlyPlaying = symbol;
 		if (window.IS_MUSE_EDITOR) dispatch("ADD_PLAYED", { symbol });
 		if (symbol === ";") await sleep(1000/that.bpm*60*beats);
 		else if (symbol in that.samples) that.samples[symbol](60*1000/that.bpm*beats, audioCtx);
@@ -97,13 +97,3 @@ const compile = (...args) => museTag(...args);
 
 
 export { createMuse, compile, length };
-
-
-
-
-
-
-
-
-
-
