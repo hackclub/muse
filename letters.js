@@ -71,9 +71,6 @@ function getLetters(ops) {
       })
     }
   } else console.error("Unexpected synth type:", type)
-
-  // console.log(newLetters);
-
   return newLetters;
 }
 
