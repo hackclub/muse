@@ -36,25 +36,18 @@ async function playNote(frequency, duration, ctx, ops = {}) {
   o.type = ops.type || 'sine';
   o.connect(g)
   g.connect(ctx.destination)
-  o.start()
+  o.start();
+
+  const endTime = ctx.currentTime + duration*2/1000;
+  o.stop(endTime)
+  
   g.gain.setValueAtTime(0, ctx.currentTime);
   g.gain.linearRampToValueAtTime(.2, ctx.currentTime + duration/5/1000);
   g.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + duration/1000)
   g.gain.linearRampToValueAtTime(0, ctx.currentTime + duration*2/1000) // does this ramp from the last ramp
-  // o.stop();
-  // audioCtx.close();
-
-  // create Oscillator node
-  // var oscillator = audioCtx.createOscillator();
-  // var gainNode = audioCtx.createGain();
-  // oscillator.type = 'sine';
-  // oscillator.frequency.value = frequency; // value in hertz
-  // oscillator.connect(gainNode);
-  // gainNode.connect(audioCtx.destination)
-  // oscillator.start();
-  // gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
-  // gainNode.gain.linearRampToValueAtTime(1, audioCtx.currentTime + duration/2/1500);
-  // gainNode.gain.linearRampToValueAtTime(0, audioCtx.currentTime + duration/1500);
+  o.onended = () => {
+    g.disconnect();
+  };
 }
 
 function getLetters(ops) {
@@ -78,7 +71,6 @@ function getLetters(ops) {
       })
     }
   } else console.error("Unexpected synth type:", type)
-
   return newLetters;
 }
 
